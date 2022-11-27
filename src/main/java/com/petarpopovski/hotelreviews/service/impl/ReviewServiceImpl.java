@@ -49,9 +49,15 @@ public class ReviewServiceImpl implements ReviewService {
         User author = this.userRepository.findById(authorId).orElseThrow(() -> new InvalidUserIdException(authorId));
         Review review = new Review(author,hotel,grade,description);
 
+        this.reviewRepository.save(review);
 
+        /**     HERE I NEED TO UPDATE THE OVERRAL RATING FOR THAT PARTICULAR HOTEL THAT THIS REVIEW IS WRITTEN FOR   **/
+        List<Review> reviewsForHotel = this.reviewRepository.findAllByHotel_Id(hotelId);
+        Double updatedOverralRating = reviewsForHotel.stream().mapToDouble(Review::getGrade).sum() / reviewsForHotel.size();
+        hotel.setOverralRating(updatedOverralRating);
+        this.hotelRepository.save(hotel);
 
-        return this.reviewRepository.save(review);
+        return review;
     }
 
     @Override

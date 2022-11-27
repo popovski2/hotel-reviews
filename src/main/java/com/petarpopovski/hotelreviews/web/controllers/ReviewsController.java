@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,8 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/reviews")
 public class ReviewsController {
+
+    HttpSession session = null;
 
     private final ReviewService reviewService;
     private final UserService userService;
@@ -40,10 +43,19 @@ public class ReviewsController {
             model.addAttribute("hotel",hotel);
 
             User user = (User) authentication.getPrincipal();
+
+            session = request.getSession();
+            // ako e vekje lajknato togas unlike napravi i return
+            if((session.getAttribute("liked")!=null) && session.getAttribute("liked").equals(true)){
+                this.userService.removeLikeFromReview(user.getId(),reviewId);
+                session.setAttribute("liked",false);
+                return "redirect:/hotel-details/"+hotelId;
+            }
+
             this.userService.likeReview(user.getId(),reviewId);
-            System.out.println("this user is liking this review: " + user.getDisplayName());
-            System.out.println("the review: " + this.reviewService.findById(reviewId).get().getDescription());
+            session.setAttribute("liked",true);
             return "redirect:/hotel-details/"+hotelId;
+
         } catch (RuntimeException exception){
             System.out.println(exception.toString());
             System.out.println(exception.getLocalizedMessage());
@@ -54,11 +66,26 @@ public class ReviewsController {
     @PostMapping("/dislikeReview/{reviewId}")
     public String dislikeReview(@PathVariable Long reviewId, Long hotelIdDislike,HttpServletRequest request, Authentication authentication, Model model){
         try{
+
+            /**     I GET THE HOTEL IN ORDER TO SEND THE DATA BACK AGAIN TO HOTEL DETAILS   **/
             Hotel hotel = this.hotelService.findById(hotelIdDislike).get();
             model.addAttribute("hotel",hotel);
+
             User user = (User) authentication.getPrincipal();
+
+            /**     I GET THE SESSION IN ORDER TO SET IF THE USER HAS LIKED THE REVIEW OR NOT  **/
+            session = request.getSession();
+            // ako e vekje lajknato togas unlike napravi i return
+            if((session.getAttribute("disliked")!=null) && session.getAttribute("disliked").equals(true)){
+                this.userService.removeDislikeFromReview(user.getId(),reviewId);
+                session.setAttribute("disliked",false);
+                return "redirect:/hotel-details/"+hotelIdDislike;
+            }
+
             this.userService.dislikeReview(user.getId(),reviewId);
+            session.setAttribute("disliked",true);
             return "redirect:/hotel-details/"+hotelIdDislike;
+
         } catch (RuntimeException exception){
             System.out.println(exception.toString());
             System.out.println(exception.getLocalizedMessage());
@@ -127,6 +154,7 @@ public class ReviewsController {
 
         User user = (User) authentication.getPrincipal();
         this.reviewService.create(user.getId(),hotelId,grade,description);
+      //  this.hotelService.updateOverralRating(hotelId,grade);
         return "redirect:/hotel-details/" + hotelId;
     }
 

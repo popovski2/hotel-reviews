@@ -36,11 +36,12 @@ public class HotelsController {
 
         //  get all hotels
         List<Hotel> hotels = this.hotelService.listAllHotels();
-        System.out.println("Hotels: " + hotels);
         model.addAttribute("hotels",hotels);
 
         return "hotels";
     }
+
+
 
 
     /**                             *
@@ -48,7 +49,7 @@ public class HotelsController {
      *          GET EDIT HOTEL      *
      *                              *
      * **/
-    @GetMapping("/edit-form/{id}")
+    @GetMapping("/admin/edit-form/{id}")
     public String editHotelPage(@PathVariable Long id, Model model){
         if(this.hotelService.findById(id).isPresent()){
 
@@ -68,7 +69,7 @@ public class HotelsController {
      * **/
 
 
-    @GetMapping("add-form")
+    @GetMapping("/admin/add-form")
     public String addHotelPage(Model model){
                 return "add-hotel";
     }
@@ -79,7 +80,7 @@ public class HotelsController {
      *                              *
      * **/
 
-    @PostMapping("/add")
+    @PostMapping("/admin/add")
     public String saveHotel(  @RequestParam(required = false) Long id,
                               @RequestParam String name,
                               @RequestParam String address,
@@ -91,6 +92,7 @@ public class HotelsController {
         } else {
             this.hotelService.create(name,address,imageUrl,description);
         }
+
         return "redirect:/hotels";
     }
 
@@ -100,7 +102,7 @@ public class HotelsController {
      *                              *
      * **/
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/admin/delete/{id}")
     public String deleteHotel(@PathVariable Long id){
         this.hotelService.delete(id);
         return "redirect:/hotels";

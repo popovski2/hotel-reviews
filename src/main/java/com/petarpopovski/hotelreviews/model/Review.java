@@ -26,14 +26,14 @@ public class Review implements Serializable {
 
         private String description;
 
-       // private Integer likes;
+        // private Integer likes;
 
-        private Integer dislikes;
+        //private Integer dislikes;
 
-        @ManyToMany
+        @ManyToMany(cascade = CascadeType.REMOVE)
         private Set<User> usersLiked;
 
-        @ManyToMany
+        @ManyToMany(cascade = CascadeType.REMOVE)
         private Set<User> usersDisiked;
 
 
@@ -97,10 +97,6 @@ public class Review implements Serializable {
         return this.usersDisiked.size();
     }
 
-    public void setDislikes(Integer dislikes) {
-        this.dislikes = dislikes;
-    }
-
     public Set<User> getUsersLiked() {
         return usersLiked;
     }
@@ -128,6 +124,7 @@ public class Review implements Serializable {
 
     public void removeLikeFromUser(User user){
         this.usersLiked.remove(user);
+
     }
 
     public void removeDislikeFromUser(User user){

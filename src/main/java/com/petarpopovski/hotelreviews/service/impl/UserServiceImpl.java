@@ -137,7 +137,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Review review = this.reviewRepository.findById(reviewId).orElseThrow(() -> new InvalidReviewIdException(reviewId));
         review.removeLikeFromUser(user);
 
-
     }
 
     @Override
@@ -155,7 +154,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public void removeDislikeFromReview(Long userId, Long reviewId) {
         User user = this.userRepository.findById(userId).orElseThrow();
         Review review = this.reviewRepository.findById(reviewId).orElseThrow();
-        review.setDislikes(review.getLikes()-1);
         review.removeDislikeFromUser(user);
 
     }

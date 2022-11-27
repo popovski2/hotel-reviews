@@ -31,11 +31,7 @@ public class DataInitializer {
 
         for (int i = 0; i <10 ; i++) {
             this.hotelService.create("Hotel"+i,"Address"+i,"https://media.istockphoto.com/id/104731717/photo/luxury-resort.jpg?s=612x612&w=0&k=20&c=cODMSPbYyrn1FHake1xYz9M8r15iOfGz9Aosy9Db7mI=","DescriptionDescriptionDescriptioDescription");
-            this.reviewService.create(1L,1L,4,"This is review for the hotel 1");
-        }
-
-        for (int i = 0; i < 10; i++) {
-            this.reviewService.create(1L,i+1L,3,"Description review");
+            this.reviewService.create(1L,i+1L,4,"This is review for the hotel 1");
         }
 
     }

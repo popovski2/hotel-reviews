@@ -1,8 +1,10 @@
 package com.petarpopovski.hotelreviews.service.impl;
 
 import com.petarpopovski.hotelreviews.model.Hotel;
+import com.petarpopovski.hotelreviews.model.Review;
 import com.petarpopovski.hotelreviews.model.exceptions.InvalidHotelIdException;
 import com.petarpopovski.hotelreviews.repository.HotelRepository;
+import com.petarpopovski.hotelreviews.repository.ReviewRepository;
 import com.petarpopovski.hotelreviews.service.interfaces.HotelService;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +17,11 @@ import java.util.stream.Collectors;
 public class HotelServiceImpl implements HotelService {
 
     private final HotelRepository hotelRepository;
+    private final ReviewRepository reviewRepository;
 
-    public HotelServiceImpl(HotelRepository hotelRepository) {
+    public HotelServiceImpl(HotelRepository hotelRepository, ReviewRepository reviewRepository) {
         this.hotelRepository = hotelRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     @Override
@@ -66,5 +70,14 @@ public class HotelServiceImpl implements HotelService {
         Hotel hotelForDeletion = this.hotelRepository.findById(hotelId).orElseThrow(() -> new InvalidHotelIdException(hotelId));
         this.hotelRepository.delete(hotelForDeletion);
         return hotelForDeletion;
+    }
+
+    @Override
+    public void updateOverralRating(Long hotelId, Integer grade) {
+        Hotel hotel = this.hotelRepository.findById(hotelId).orElseThrow(() -> new InvalidHotelIdException(hotelId));
+        List<Review> reviews = this.reviewRepository.findAllByHotel_Id(hotelId);
+
+        Double updatedOverralRating = reviews.stream().mapToDouble(Review::getGrade).sum() / reviews.size();
+        hotel.setOverralRating(updatedOverralRating);
     }
 }
