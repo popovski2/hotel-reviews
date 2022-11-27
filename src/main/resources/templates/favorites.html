@@ -3,48 +3,68 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Hotels</title>
+    <title>Favorites</title>
 
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta charset="UTF-8"/>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
 </head>
 
 <body>
 
 <!-- USING THE HEADER FRAGMENT FROM FRAGMENTS/HEADER-->
-<div th:replace="fragments/header :: header"> </div>
+<div th:replace="fragments/header :: header"></div>
 
 
-<section class="pt-5 pb-5 mt-0 align-items-center d-flex jumbotron">
-    <div class="container" style="background-image: url('https://www.tropical-landscaping.com/files/2314/8360/4749/banner01.jpg'); opacity: 0.9; background-size: cover; height: 40vh;">
-        <div class="justify-content-center align-items-center d-flex text-center h-100">
-            <div class="col-12 col-md-8  h-50 ">
-                <div>
-                    <h1 class="display-2  text-light mb-2 mt-5 jumbotron-heading text-light">All hotels</h1>
-                </div>
+
+<th:block xmlns:th="http://www.thymeleaf.org">
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h3 class="jumbotron-heading"><i>Favorite hotels for
+                <th:block th:if="${#request.getRemoteUser() != null}" th:text="${#request.getRemoteUser()}"></th:block>
+            </i></h3>
+        </div>
+    </section>
+
+
+    <div class="container" th:if="${favorites.size() == 0}">
+        <div style="justify-content: center; padding-left: 200px;">
+            <img style="display: flex" width="600px" height="400px" src="https://upload.wikimedia.org/wikipedia/commons/1/1e/Heart-SG2001-transparent.png">
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-right" th:if="${favorites.size() > 0}">
+                <form th:action="@{'/favorites/emptyFavorites'}" th:method="DELETE">
+                    <button type="submit" onclick="return confirm('Are you sure you want to remove all hotels from Favorites?')" class="btn btn-sm btn-outline-danger">Clear favorites</button>
+                </form>
             </div>
         </div>
     </div>
-</section>
 
-<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+    <div th:if="${hasError}">
+        <h5 class="text-center text-danger" th:text="${error}"></h5>
+    </div>
 
-
-<br/>
-
+</th:block>
+<br>
+<br>
 
 <!-- LISTING ALL HOTELS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
 <div class="container">
-    <div class="row clearfix" th:if="${hotels.size() > 0}" th:fragment="list">
+    <div class="row clearfix" th:if="${favorites.size() > 0}" th:fragment="list">
 
 
-        <div th:each="hotel : ${hotels}" class="col-md-6 col-xl-3 portfolio-item" th:classappend="${hotel.getHotelName()}">
+        <div th:each="hotel : ${favorites}" class="col-md-6 col-xl-3 portfolio-item" th:classappend="${hotel.getHotelName()}">
             <div class="card product_item m-b-30" >
                 <div class="card-body row">
                     <div class="cp_img col-6">
@@ -52,31 +72,20 @@
 
                         </br>
                         <div class="hover">
-                        <th:block sec:authorize="hasAuthority('REGULAR_USER')">
-                            <a style="display: inline-block;" th:href="@{'/hotels/details/{id}' (id=${hotel.getId()})}" class="btn btn-secondary btn-sm waves-effect"><i class="zmdi ">Details</i></a>
-                        </th:block>
+                            <th:block sec:authorize="hasAuthority('REGULAR_USER')">
+                                <a style="display: inline-block;" th:href="@{'/hotels/details/{id}' (id=${hotel.getId()})}" class="btn btn-secondary btn-sm waves-effect"><i class="zmdi ">Details</i></a>
+                            </th:block>
                         </div>
 
                         </br>
 
-                        <div class="hover">
-                        <th:block sec:authorize="hasAuthority('REGULAR_USER')">
-                            <form style="display: inline-block;" th:action="@{'/favorites/add/{id}' (id=${hotel.getId()})}" th:method="POST">
-                                <button type="submit" class="btn btn-danger btn-sm waves-effect"><i class="zmdi ">Add to favorites</i></button>
-                            </form>
-                        </th:block>
-                        </div>
-
 
 
                         <div class="hover">
-                            <th:block sec:authorize="hasAuthority('ADMIN')">
-                                <a style="display: inline-block;" th:href="@{'/hotels/edit-form/{id}' (id=${hotel.getId()})}" class="btn btn-secondary btn-sm waves-effect"><i class="zmdi zmdi-edit"></i></a>
-                            </th:block>
 
-                            <th:block sec:authorize="hasAuthority('ADMIN')">
-                                <form style="display: inline-block;" th:action="@{'/hotels/delete/{id}' (id=${hotel.getId()})}" th:method="DELETE">
-                                    <button type="submit" onclick="return confirm('Are you sure you want to delete this hotel item?')" class="btn btn-danger btn-sm waves-effect"><i class="zmdi zmdi-delete"></i></button>
+                            <th:block sec:authorize="hasAuthority('REGULAR_USER')">
+                                <form style="display: inline-block;" th:action="@{'/favorites/delete/{id}' (id=${hotel.getId()})}" th:method="DELETE">
+                                    <button type="submit" onclick="return confirm('Are you sure you want to delete this hotel from favorites?')" class="btn btn-danger btn-sm waves-effect"><i class="zmdi zmdi-delete"></i></button>
                                 </form>
                             </th:block>
 
@@ -104,28 +113,8 @@
 
 
 
-
-
-<!-- ADD NEW HOTEL-->
-<div class="container">
-    <div class="col mb-3">
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <th:block sec:authorize="hasAuthority('ADMIN')">
-                    <a href="/hotels/add-form" class="btn btn-block btn-dark">Add new hotel</a>
-                </th:block>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<br>
-<br>
-
 <!-- USING THE FOOTER FRAGMENT FROM FRAGMENTS/FOOTER-->
-<div th:replace="fragments/footer :: footer"> </div>
-
+<div th:replace="fragments/footer :: footer"></div>
 
 
 <style>
@@ -868,38 +857,5 @@
 
 
 
-
-<script type="text/javascript">
-    $(function(){
-        $('.categories a').click(function(e){
-
-            $('.categories ul li').removeClass('active');
-
-            $(this).parent('li').addClass('active');
-
-            var itemSelected = $(this).attr('data-filter');
-            console.log(itemSelected);
-
-            $('.portfolio-item').each(function(){
-                if (itemSelected === '*'){
-                    $(this).removeClass('filtered').removeClass('selected');
-                    return;
-                } else if($(this).is(itemSelected)){
-                    $(this).removeClass('filtered').addClass('selected');
-                } else{
-                    $(this).removeClass('selected').addClass('filtered');
-                }
-            });
-        });
-    });
-
-
-
-</script>
-
-
 </body>
-
-
-
 </html>

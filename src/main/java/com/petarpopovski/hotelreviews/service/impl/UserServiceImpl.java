@@ -112,7 +112,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             user.getFavorites().remove(hotel);
         }
         else throw new InvalidRoleException(user.getDisplayName());
+    }
 
+    @Override
+    public void removeAllFromFavorites(Long userId) {
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new InvalidUserIdException(userId));
+        user.getFavorites().clear();
     }
 
     @Override

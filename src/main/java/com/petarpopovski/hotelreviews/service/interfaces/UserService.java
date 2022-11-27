@@ -28,6 +28,8 @@ public interface UserService extends UserDetailsService {
     void addHotelToFavorites(Long userId, Long hotelId);
     void removeHotelFromFavorites(Long userId, Long hotelId);
 
+    void removeAllFromFavorites(Long userId);
+
     void likeReview(Long userId, Long reviewId);
     void removeLikeFromReview(Long userId, Long reviewId);
 

@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-public class Hotel implements Serializable {
+public class Hotel implements Serializable, Comparable<Hotel> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -93,5 +93,10 @@ public class Hotel implements Serializable {
 
     public void setOverralRating(Double overralRating) {
         this.overralRating = overralRating;
+    }
+
+    @Override
+    public int compareTo(Hotel o) {
+        return hotelName.compareTo(o.hotelName);
     }
 }

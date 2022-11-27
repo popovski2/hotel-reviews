@@ -36,6 +36,7 @@ public class HotelsController {
 
         //  get all hotels
         List<Hotel> hotels = this.hotelService.listAllHotels();
+        System.out.println("Hotels: " + hotels);
         model.addAttribute("hotels",hotels);
 
         return "hotels";

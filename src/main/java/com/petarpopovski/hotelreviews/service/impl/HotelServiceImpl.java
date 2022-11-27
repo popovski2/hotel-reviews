@@ -6,8 +6,10 @@ import com.petarpopovski.hotelreviews.repository.HotelRepository;
 import com.petarpopovski.hotelreviews.service.interfaces.HotelService;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class HotelServiceImpl implements HotelService {
@@ -20,7 +22,8 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public List<Hotel> listAllHotels() {
-        return this.hotelRepository.findAll();
+
+        return this.hotelRepository.findAll().stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
     }
 
     @Override
