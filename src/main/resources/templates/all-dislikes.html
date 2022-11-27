@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>All dislikes</title>
+
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+
+<body>
+
+<!-- USING THE HEADER FRAGMENT FROM FRAGMENTS/HEADER-->
+<div th:replace="fragments/header :: header"></div>
+
+
+
+<th:block xmlns:th="http://www.thymeleaf.org">
+
+    <div th:if="${hasError}">
+        <h5 class="text-center text-danger" th:text="${error}"></h5>
+    </div>
+
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h3 class="jumbotron-heading"><i>Dislikes for the review of
+                <h4 class="product-title" th:text="${review.get().getAuthor().getUsername()}"></h4>
+
+            </i></h3>
+        </div>
+    </section>
+
+
+
+    </br>
+    </br>
+
+
+    <!-- REVIEWS FOR THE HOTEL -->
+    <div class="container mb-4">
+        <div class="row">
+            <div class="col-12" th:if="${usersDisliked.size() >= 0}">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Likes</th>
+
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr id="items" th:each="user : ${usersDisliked}" class="cart-item">
+
+                            <td>
+                                <div class="product-item">
+                                    <div class="product-info">
+                                        <br>
+                                        <span><em th:text="${user.getUsername()!= null} ? 'Users: ' + ${user.getUsername()} : 'No Likes'"></em></span>
+                                        <br>
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+                    <div class="text-right">
+                        <h4>
+                            <strong th:text="'Total dislikes: ' + ${#numbers.formatDecimal(usersDisliked.size(),0,0)}">
+                            </strong>
+                        </h4>
+                    </div>
+                    <hr>
+                    <br>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<br>
+<br>
+
+
+
+<!-- USING THE FOOTER FRAGMENT FROM FRAGMENTS/FOOTER-->
+<div th:replace="fragments/footer :: footer"></div>
+
+
+
+</body>
+</html>

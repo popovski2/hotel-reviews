@@ -83,7 +83,6 @@
 
     </br>
     </br>
-    <!-- LEAVE A REVIEW HERE -->
 
 
 
@@ -93,13 +92,20 @@
             <div class="col-12" th:if="${reviews.size() >= 0}">
                 <div class="table-responsive">
                     <table class="table table-striped">
+
+                        <!-- LEAVE A REVIEW BUTTON HERE -->
+                        <th:block sec:authorize="hasAuthority('REGULAR_USER')">
+                            <form style="display: inline-block;" th:action="@{'/reviews/add/{hotelId}' (hotelId=${hotel.getId()})}">
+                                <button type="submit" class="btn btn-primary btn-sm waves-effect"><i class="zmdi ">Leave a review</i></button>
+                            </form>
+                        </th:block>
+                        </br>
+
                         <thead>
                         <tr>
                             <th scope="col">Review</th>
                             <th scope="col">Description</th>
                             <th scope="col">Like</th>
-                            <th scope="col"></th>
-
                         </tr>
                         </thead>
                         <tbody>
@@ -110,10 +116,26 @@
                                     <h4 class="product-title" th:text="${rev.getAuthor().getUsername()}"></h4>
                                     <div class="product-info">
                                         <br>
-                                        <h3 class="product-title" th:text="${rev.getGrade() != null} ? 'Grade: '+ ${rev.getGrade()} : 'No Grade'"></h3>
-                                        <span><em th:text="${rev.getLikes() != null} ? 'Likes: ' + ${rev.getLikes()} : 'No Likes'"></em></span>
+                                        <h5 class="product-title" th:text="${rev.getGrade() != null} ? 'Grade: '+ ${rev.getGrade()} : 'No Grade'"></h5>
                                         <br>
-                                        <span><em th:text="${rev.getDislikes() != null} ? 'Dislikes: ' + ${rev.getDislikes()} : 'No Dislkes'"></em></span>
+
+                                        <form th:action="@{'/reviews/allLikes/{reviewId}' (reviewId=${rev.getId()})}" >
+                                            <button type="submit" class="btn btn-light btn-circle btn-sm">
+                                                <span><em th:text="${rev.getLikes() != null} ?  ${rev.getLikes()} + ' Likes'  : 'No Likes'"></em></span>
+                                            </button>
+<!--
+                                            <input id="hotelIdLikes" type="hidden" name="hotelIdLikes" th:value="(${hotel} != null ? ${hotel.getId()} : '')">
+-->
+                                        </form>
+                                        <br>
+                                        <form th:action="@{'/reviews/allDislikes/{reviewId}' (reviewId=${rev.getId()})}" >
+                                            <button type="submit" class="btn btn-light btn-circle btn-sm">
+                                                <span><em th:text="${rev.getDislikes() != null} ?  ${rev.getDislikes()} + ' Dislikes'  : 'No Dislikes'"></em></span>
+                                            </button>
+                                            <!--
+                                                                                        <input id="hotelIdLikes" type="hidden" name="hotelIdLikes" th:value="(${hotel} != null ? ${hotel.getId()} : '')">
+                                            -->
+                                        </form>
                                     </div>
                                 </div>
                             </td>

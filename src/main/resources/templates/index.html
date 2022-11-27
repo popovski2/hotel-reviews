@@ -62,47 +62,7 @@
         <h1>Hotels</h1>
         <p class="w-lg-50 mx-auto"><i>Web application for hotel reviews <br> made for the purposes of the internship challenge.</i></p>
     </div>
-
-
-
-
-
-
-
-
-
-
-    <!-- LISTING ALL HOTELS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
-    <div class="container">
-        <div class="row clearfix" th:if="${hotels.size() > 0}" th:fragment="list">
-            <div th:each="hotel : ${hotels}" class="col-md-6 col-xl-3 portfolio-item" th:classappend="${hotel.getHotelName()}">
-                <div class="card product_item m-b-30" >
-                    <div class="card-body row">
-                        <div class="cp_img col-6">
-                            <img th:src="${hotel.getImageUrl()}" alt="Product" class="img-fluid">
-
-
-
-                        </div>
-
-                    </div>
-                    <div class="product_details">
-                        <h5 th:text="${hotel.getHotelName()}" style="padding-left: 5%"></h5>
-                        <ul class="product_price list-unstyled" style="padding-left: 5%; padding-bottom: 5%;">
-                            <li class="old_price" th:text="'Rating: ' + ${hotel.getOverralRating()}"></li>
-                        </ul>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
-
-
-
-
 
 
 
