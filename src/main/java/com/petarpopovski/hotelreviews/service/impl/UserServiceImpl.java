@@ -122,9 +122,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void likeReview(Long userId, Long reviewId) {
+
         User user = this.userRepository.findById(userId).orElseThrow(() -> new InvalidUserIdException(userId));
         Review review = this.reviewRepository.findById(reviewId).orElseThrow(() -> new InvalidReviewIdException(reviewId));
-        review.setLikes(review.getLikes()+1);
+        if(review.getUsersDisiked().contains(user)){
+            removeDislikeFromReview(userId,reviewId);
+        }
         review.addLikeFromUser(user);
     }
 
@@ -132,7 +135,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public void removeLikeFromReview(Long userId, Long reviewId) {
         User user = this.userRepository.findById(userId).orElseThrow(() -> new InvalidUserIdException(userId));
         Review review = this.reviewRepository.findById(reviewId).orElseThrow(() -> new InvalidReviewIdException(reviewId));
-        review.setLikes(review.getLikes()-1);
         review.removeLikeFromUser(user);
 
 
@@ -142,7 +144,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public void dislikeReview(Long userId, Long reviewId) {
         User user = this.userRepository.findById(userId).orElseThrow();
         Review review = this.reviewRepository.findById(reviewId).orElseThrow();
-        review.setDislikes(review.getDislikes()+1);
+        if(review.getUsersLiked().contains(user)){
+            removeLikeFromReview(userId,reviewId);
+        }
         review.addDislikeFromUser(user);
 
     }

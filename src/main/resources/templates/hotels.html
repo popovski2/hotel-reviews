@@ -53,7 +53,7 @@
                         </br>
                         <div class="hover">
                         <th:block sec:authorize="hasAuthority('REGULAR_USER')">
-                            <a style="display: inline-block;" th:href="@{'/hotels/details/{id}' (id=${hotel.getId()})}" class="btn btn-secondary btn-sm waves-effect"><i class="zmdi ">Details</i></a>
+                            <a style="display: inline-block;" th:href="@{'/hotel-details/{id}' (id=${hotel.getId()})}" class="btn btn-secondary btn-sm waves-effect"><i class="zmdi ">Details</i></a>
                         </th:block>
                         </div>
 

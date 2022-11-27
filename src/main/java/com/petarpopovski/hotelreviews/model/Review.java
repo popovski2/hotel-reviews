@@ -4,7 +4,10 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Review implements Serializable {
@@ -23,15 +26,15 @@ public class Review implements Serializable {
 
         private String description;
 
-        private Integer likes;
+       // private Integer likes;
 
         private Integer dislikes;
 
         @ManyToMany
-        private List<User> usersLiked;
+        private Set<User> usersLiked;
 
         @ManyToMany
-        private List<User> usersDisiked;
+        private Set<User> usersDisiked;
 
 
     public Review(User author, Hotel hotel, Integer grade, String description) {
@@ -39,9 +42,8 @@ public class Review implements Serializable {
         this.hotel = hotel;
         this.grade = grade;
         this.description = description;
-        this.likes = likes;
-        this.usersLiked = usersLiked;
-        this.usersDisiked = usersDisiked;
+        this.usersLiked = new HashSet<>();
+        this.usersDisiked = new HashSet<>();
     }
 
     public Review() {
@@ -88,34 +90,30 @@ public class Review implements Serializable {
     }
 
     public Integer getLikes() {
-        return likes;
-    }
-
-    public void setLikes(Integer likes) {
-        this.likes = likes;
+        return usersLiked.size();
     }
 
     public Integer getDislikes() {
-        return dislikes;
+        return this.usersDisiked.size();
     }
 
     public void setDislikes(Integer dislikes) {
         this.dislikes = dislikes;
     }
 
-    public List<User> getUsersLiked() {
+    public Set<User> getUsersLiked() {
         return usersLiked;
     }
 
-    public void setUsersLiked(List<User> usersLiked) {
+    public void setUsersLiked(Set<User> usersLiked) {
         this.usersLiked = usersLiked;
     }
 
-    public List<User> getUsersDisiked() {
+    public Set<User> getUsersDisiked() {
         return usersDisiked;
     }
 
-    public void setUsersDisiked(List<User> usersDisiked) {
+    public void setUsersDisiked(Set<User> usersDisiked) {
         this.usersDisiked = usersDisiked;
     }
 

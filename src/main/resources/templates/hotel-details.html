@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel details</title>
+
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+
+<body>
+
+<!-- USING THE HEADER FRAGMENT FROM FRAGMENTS/HEADER-->
+<div th:replace="fragments/header :: header"></div>
+
+
+
+<th:block xmlns:th="http://www.thymeleaf.org">
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h3 class="jumbotron-heading"><i>Details and reviews for
+                    <h4 class="product-title" th:text="${hotel.getHotelName()}"></h4>
+
+            </i></h3>
+        </div>
+    </section>
+
+
+
+
+    <div th:if="${hasError}">
+        <h5 class="text-center text-danger" th:text="${error}"></h5>
+    </div>
+
+
+    <!-- DETAILS FOR THE HOTEL-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+    <div class="container">
+        <div class="row clearfix">
+
+            <div class="col-md-6 col-xl-3 portfolio-item" th:classappend="${hotel.getHotelName()}">
+                <div class="card product_item m-b-30" >
+                    <div class="card-body row">
+                        <div class="cp_img col-6">
+                            <img th:src="${hotel.getImageUrl()}" alt="Product" class="img-fluid">
+
+                            </br>
+
+                        </div>
+
+                        <div class="hover">
+                            <th:block sec:authorize="hasAuthority('REGULAR_USER')">
+                                <form style="display: inline-block;" th:action="@{'/favorites/add/{id}' (id=${hotel.getId()})}" th:method="POST">
+                                    <button type="submit" class="btn btn-danger btn-sm waves-effect"><i class="zmdi ">Add to favorites</i></button>
+                                </form>
+                            </th:block>
+                        </div>
+
+                        <div class="product_details" style="width: inherit;">
+                            <h3>Description: </h3>
+                            <ul class="product_price list-unstyled">
+                                <li class="old_price"  th:text="${hotel.getDescription()}"></li>
+                                </br>
+                                <h3>Address: </h3>
+                                <li class="old_price" th:text="${hotel.getAddress()}"></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    </br>
+    </br>
+    <!-- LEAVE A REVIEW HERE -->
+
+
+
+    <!-- REVIEWS FOR THE HOTEL -->
+    <div class="container mb-4">
+        <div class="row">
+            <div class="col-12" th:if="${reviews.size() >= 0}">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Review</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Like</th>
+                            <th scope="col"></th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr id="items" th:each="rev : ${reviews}" class="cart-item">
+
+                            <td>
+                                <div class="product-item">
+                                    <h4 class="product-title" th:text="${rev.getAuthor().getUsername()}"></h4>
+                                    <div class="product-info">
+                                        <br>
+                                        <h3 class="product-title" th:text="${rev.getGrade() != null} ? 'Grade: '+ ${rev.getGrade()} : 'No Grade'"></h3>
+                                        <span><em th:text="${rev.getLikes() != null} ? 'Likes: ' + ${rev.getLikes()} : 'No Likes'"></em></span>
+                                        <br>
+                                        <span><em th:text="${rev.getDislikes() != null} ? 'Dislikes: ' + ${rev.getDislikes()} : 'No Dislkes'"></em></span>
+                                    </div>
+                                </div>
+                            </td>
+
+
+                            <td style="width: 50px;" th:text="${rev.getDescription() + 'dddddddddddddd'}"></td>
+
+                            <!-- LIKE / DISLIKE -->
+                            <td class="text-right">
+                                <form th:action="@{'/reviews/likeReview/{reviewId}' (reviewId=${rev.getId()})}" th:method="POST">
+                                    <button type="submit" class="btn btn-light btn-circle btn-sm">Like</button>
+                                    <input id="hotelId" type="hidden" name="hotelId" th:value="(${hotel} != null ? ${hotel.getId()} : '')">
+
+                                </form>
+                            </td>
+                            <td class="text-right">
+                                <form th:action="@{'/reviews/dislikeReview/{reviewId}' (reviewId=${rev.getId()})}" th:method="POST">
+                                    <button type="submit" class="btn btn-light btn-circle btn-sm">Dislike</button>
+                                    <input id="hotelIdDislike" type="hidden" name="hotelIdDislike" th:value="(${hotel} != null ? ${hotel.getId()} : '')">
+
+                                </form>
+                            </td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+                    <div class="text-right">
+                        <h4>
+                            <strong th:text="'Overral rating: ' + ${#numbers.formatDecimal(0, 0, 'COMMA', 2, 'POINT')}">
+                            </strong>
+                        </h4>
+                    </div>
+                    <hr>
+                    <br>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<br>
+<br>
+
+
+
+<!-- USING THE FOOTER FRAGMENT FROM FRAGMENTS/FOOTER-->
+<div th:replace="fragments/footer :: footer"></div>
+
+
+
+</body>
+</html>
