@@ -41,6 +41,20 @@ public class HotelsController {
         return "hotels";
     }
 
+    @GetMapping("/search")
+    public String searchHotels(@RequestParam String searchText, Model model){
+
+        try {
+            List<Hotel> searchHotels = this.hotelService.search(searchText);
+            model.addAttribute("searchHotels", searchHotels);
+            return "search-result";
+        }
+        catch (Exception e ){
+            model.addAttribute("hotelError","Hotel does not exist");
+            return "redirect:/hotels";
+        }
+
+    }
 
 
 

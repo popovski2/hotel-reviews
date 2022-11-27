@@ -41,6 +41,7 @@ public class HotelServiceImpl implements HotelService {
         return this.hotelRepository.findAllByAddress(address);
     }
 
+
     @Override
     public Hotel findByName(String hotelName) {
         return this.hotelRepository.findByHotelName(hotelName);
@@ -79,5 +80,18 @@ public class HotelServiceImpl implements HotelService {
 
         Double updatedOverralRating = reviews.stream().mapToDouble(Review::getGrade).sum() / reviews.size();
         hotel.setOverralRating(updatedOverralRating);
+    }
+
+
+    public List<Hotel> search(String searchText) {
+
+        List<Hotel> result = this.hotelRepository.findAll();
+
+        return result.stream()
+                .filter(hotel ->
+                        (hotel.getAddress().toLowerCase().contains(searchText.toLowerCase()))
+                        || (hotel.getHotelName().equalsIgnoreCase(searchText)))
+                .collect(Collectors.toList());
+
     }
 }

@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Hotels</title>
+    <title>Search result</title>
 
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -25,7 +25,7 @@
         <div class="justify-content-center align-items-center d-flex text-center h-100">
             <div class="col-12 col-md-8  h-50 ">
                 <div>
-                    <h1 class="display-2  text-light mb-2 mt-5 jumbotron-heading text-light">All hotels</h1>
+                    <h1 class="display-2  text-light mb-2 mt-5 jumbotron-heading text-light">Search result</h1>
                 </div>
             </div>
         </div>
@@ -41,94 +41,78 @@
 
 
 
-<!-- LISTING ALL HOTELS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
-<div class="container">
 
- <!--   <th:block>
-        <form style="display: inline-block;" th:action="@{'/hotels/sorted'}">
-            <button type="submit" class="btn btn-primary btn-sm waves-effect"><i class="zmdi ">Sort by name ascending</i></button>
-        </form>
-    </th:block>-->
-    </br>
-    </br>
+    <!-- LISTING ALL HOTELS FROM SEARCH -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+    <div class="container">
 
-    <div class="row clearfix" th:if="${hotels.size() >= 0}" th:fragment="list">
-        <div th:each="hotel : ${hotels}" class="col-md-6 col-xl-3 portfolio-item" th:classappend="${hotel.getHotelName()}">
-            <div class="card product_item m-b-30" >
-                <div class="card-body row">
-                    <div class="cp_img col-12">
-                        <img th:src="${hotel.getImageUrl()}" alt="Product" class="img-fluid">
 
-                        </br>
-                        <div class="hover">
-                        <th:block sec:authorize="hasAuthority('REGULAR_USER')">
-                            <a style="display: inline-block;" th:href="@{'/hotel-details/{id}' (id=${hotel.getId()})}" class="btn btn-secondary btn-sm waves-effect"><i class="zmdi ">Details</i></a>
-                        </th:block>
+        </br>
+        </br>
+
+        <div class="row clearfix" th:if="${searchHotels.size() >= 0}" th:fragment="list">
+            <div th:each="hotel : ${searchHotels}" class="col-md-6 col-xl-3 portfolio-item" th:classappend="${hotel.getHotelName()}">
+                <div class="card product_item m-b-30" >
+                    <div class="card-body row">
+                        <div class="cp_img col-12">
+                            <img th:src="${hotel.getImageUrl()}" alt="Product" class="img-fluid">
+
+                            </br>
+                            <div class="hover">
+                                <th:block sec:authorize="hasAuthority('REGULAR_USER')">
+                                    <a style="display: inline-block;" th:href="@{'/hotel-details/{id}' (id=${hotel.getId()})}" class="btn btn-secondary btn-sm waves-effect"><i class="zmdi ">Details</i></a>
+                                </th:block>
+                            </div>
+
+
+                            <div class="hover">
+                                <th:block sec:authorize="hasAuthority('REGULAR_USER')">
+                                    <form style="display: inline-block;" th:action="@{'/favorites/add/{id}' (id=${hotel.getId()})}" th:method="POST">
+                                        <button type="submit" class="btn btn-danger btn-sm waves-effect"><i class="zmdi ">Add to favorites</i></button>
+                                    </form>
+                                </th:block>
+                            </div>
+
+                            <div class="hover">
+                                <th:block sec:authorize="hasAuthority('REGULAR_USER')">
+                                    <form style="display: inline-block;" th:action="@{'/reviews/add/{hotelId}' (hotelId=${hotel.getId()})}">
+                                        <button type="submit" class="btn btn-primary btn-sm waves-effect"><i class="zmdi ">Leave a review</i></button>
+                                    </form>
+                                </th:block>
+                            </div>
+
+
+
+                            <div class="hover">
+                                <th:block sec:authorize="hasAuthority('ADMIN')">
+                                    <a style="display: inline-block;" th:href="@{'/hotels/admin/edit-form/{id}' (id=${hotel.getId()})}" class="btn btn-secondary btn-sm waves-effect"><i class="zmdi zmdi-edit"></i></a>
+                                </th:block>
+
+                                <th:block sec:authorize="hasAuthority('ADMIN')">
+                                    <form style="display: inline-block;" th:action="@{'/hotels/admin/delete/{id}' (id=${hotel.getId()})}" th:method="DELETE">
+                                        <button type="submit" onclick="return confirm('Are you sure you want to delete this hotel item?')" class="btn btn-danger btn-sm waves-effect"><i class="zmdi zmdi-delete"></i></button>
+                                    </form>
+                                </th:block>
+                            </div>
                         </div>
-
-
-                        <div class="hover">
-                        <th:block sec:authorize="hasAuthority('REGULAR_USER')">
-                            <form style="display: inline-block;" th:action="@{'/favorites/add/{id}' (id=${hotel.getId()})}" th:method="POST">
-                                <button type="submit" class="btn btn-danger btn-sm waves-effect"><i class="zmdi ">Add to favorites</i></button>
-                            </form>
-                        </th:block>
+                        <div class="product_details">
+                            <h5 th:text="${hotel.getHotelName()}"></h5>
+                            <ul class="product_price list-unstyled">
+                                <li class="old_price" th:text="'Rating: ' + ${#numbers.formatDecimal(hotel.getOverralRating(),0, 'COMMA', 1, 'POINT')}"></li>
+                            </ul>
                         </div>
-
-                        <div class="hover">
-                            <th:block sec:authorize="hasAuthority('REGULAR_USER')">
-                                <form style="display: inline-block;" th:action="@{'/reviews/add/{hotelId}' (hotelId=${hotel.getId()})}">
-                                    <button type="submit" class="btn btn-primary btn-sm waves-effect"><i class="zmdi ">Leave a review</i></button>
-                                </form>
-                            </th:block>
-                        </div>
-
-
-
-                        <div class="hover">
-                            <th:block sec:authorize="hasAuthority('ADMIN')">
-                                <a style="display: inline-block;" th:href="@{'/hotels/admin/edit-form/{id}' (id=${hotel.getId()})}" class="btn btn-secondary btn-sm waves-effect"><i class="zmdi zmdi-edit"></i></a>
-                            </th:block>
-
-                            <th:block sec:authorize="hasAuthority('ADMIN')">
-                                <form style="display: inline-block;" th:action="@{'/hotels/admin/delete/{id}' (id=${hotel.getId()})}" th:method="DELETE">
-                                    <button type="submit" onclick="return confirm('Are you sure you want to delete this hotel item?')" class="btn btn-danger btn-sm waves-effect"><i class="zmdi zmdi-delete"></i></button>
-                                </form>
-                            </th:block>
-                        </div>
-                    </div>
-                    <div class="product_details">
-                        <h5 th:text="${hotel.getHotelName()}"></h5>
-                        <ul class="product_price list-unstyled">
-                            <li class="old_price" th:text="'Rating: ' + ${#numbers.formatDecimal(hotel.getOverralRating(),0, 'COMMA', 1, 'POINT')}"></li>
-                        </ul>
                     </div>
                 </div>
             </div>
-        </div>
 
+        </div>
     </div>
-</div>
+
+
 
 
 </th:block>
 
-
-
-
-<!-- ADD NEW HOTEL-->
-<div class="container">
-    <div class="col mb-3">
-        <div class="row">
-            <div class="col-sm-12 col-md-12">
-                <th:block sec:authorize="hasAuthority('ADMIN')">
-                    <a href="/hotels/admin/add-form" class="btn btn-block btn-dark">Add new hotel</a>
-                </th:block>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <br>

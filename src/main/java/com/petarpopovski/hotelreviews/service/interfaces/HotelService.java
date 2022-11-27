@@ -15,6 +15,8 @@ public interface HotelService {
 
     Hotel findByName(String hotelName);
 
+    List<Hotel> search(String searchText);
+
     Hotel create(String hotelName, String address, String imageUrl, String description);
 
     Hotel update(Long hotelId, String hotelName, String address, String imageUrl, String description);
