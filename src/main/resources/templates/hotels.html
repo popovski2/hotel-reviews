@@ -77,7 +77,7 @@
                         </div>
 
                         <div class="hover">
-                            <th:block sec:authorize="hasAuthority('REGULAR_USER')">
+                            <th:block sec:authorize="hasAnyAuthority('REGULAR_USER','ADMIN')"  >
                                 <form style="display: inline-block;" th:action="@{'/reviews/add/{hotelId}' (hotelId=${hotel.getId()})}">
                                     <button type="submit" class="btn btn-primary btn-sm waves-effect"><i class="zmdi ">Leave a review</i></button>
                                 </form>

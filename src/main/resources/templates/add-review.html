@@ -40,45 +40,41 @@
     </div>
 
 
-    <!-- DETAILS FOR THE HOTEL-->
+    <!-- HOTEL DETAILS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
     <div class="container">
-        <div class="row clearfix">
 
+        </br>
+
+        <div class="row clearfix" th:if="${hotel != null}" th:fragment="list">
             <div class="col-md-6 col-xl-3 portfolio-item" th:classappend="${hotel.getHotelName()}">
                 <div class="card product_item m-b-30" >
-                    <div class="card-body row">
-                        <div class="cp_img col-6">
+                    <div class="card-body row" style="width: 300px;">
+                        <div class="cp_img col-12">
                             <img th:src="${hotel.getImageUrl()}" alt="Product" class="img-fluid">
 
-                            </br>
+                            <div class="hover">
+                                <th:block sec:authorize="hasAuthority('REGULAR_USER')">
+                                    <form style="display: inline-block;" th:action="@{'/favorites/add/{id}' (id=${hotel.getId()})}" th:method="POST">
+                                        <button type="submit" class="btn btn-danger btn-sm waves-effect"><i class="zmdi ">Add to favorites</i></button>
+                                    </form>
+                                </th:block>
+                            </div>
 
                         </div>
-
-                        <div class="hover">
-                            <th:block sec:authorize="hasAuthority('REGULAR_USER')">
-                                <form style="display: inline-block;" th:action="@{'/favorites/add/{id}' (id=${hotel.getId()})}" th:method="POST">
-                                    <button type="submit" class="btn btn-danger btn-sm waves-effect"><i class="zmdi ">Add to favorites</i></button>
-                                </form>
-                            </th:block>
-                        </div>
-
-                        <div class="product_details" style="width: inherit;">
-                            <h3>Description: </h3>
+                        <div class="product_details">
+                            <h5 th:text="${hotel.getHotelName()}"></h5>
                             <ul class="product_price list-unstyled">
-                                <li class="old_price"  th:text="${hotel.getDescription()}"></li>
-                                </br>
-                                <h3>Address: </h3>
-                                <li class="old_price" th:text="${hotel.getAddress()}"></li>
+                                <li style="padding: 0;width:240px; display:block; text-align:left" th:text="'Description: ' + ${hotel.getDescription()}"></li>
                             </ul>
                         </div>
-
                     </div>
                 </div>
             </div>
 
         </div>
     </div>
+
 
     </br>
     </br>
@@ -114,8 +110,8 @@
 
 
 
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <a type="button" class="btn btn-primary" href="/hotels">Back</a>
+                    <button type="submit" class="btn btn-danger">Submit</button>
+                    <a type="button" class="btn btn-danger" href="/hotels">Back</a>
                 </form>
             </div>
         </div>
@@ -133,6 +129,613 @@
 <div th:replace="fragments/footer :: footer"></div>
 
 
+<style>
+
+    body{
+        background: #f3f3f3;
+    }
+
+    .categories ul {
+        list-style:none;
+        padding:0;
+        margin:0;
+        margin-bottom:20px;
+        text-align:center;
+
+    }
+
+    .categories ul li{
+        display:inline-block;
+        padding:0;
+        line-height:24px;
+        background:transparent;
+        margin:0;
+        margin-left:5px;
+        margin-bottom:10px;
+    }
+
+    .categories ul li a{
+        display:block;
+        font-size:18px;
+        font-weight:500;
+        padding:10px 20px;
+        border-radius:5px;
+        border:2px solid transparent;
+        -webkit-transition:all .2s ease-out;
+        transition:all .2s ease-out;
+    }
+
+    .categories ul li a,
+    .categories ul li a:active,
+    .categories ul li a:hover{
+        line-height:24px;
+        background:#fff;
+        color:#4E5961;
+        text-decoration:none;
+    }
+
+    .categories ul li a:hover,
+    .categories ul li.active a{
+        color:#fff;
+        background:darkred;
+    }
+
+    .projects-container .row{
+        -webkit-transition:height .5s ease-out;
+        transition:height .5s ease-out;
+    }
+
+    .portfolio-item {
+        position:relative;
+        margin-bottom:30px;
+        -webkit-transform:scale(1);
+        transform:scale(1);
+        opacity:1;
+        -webkit-transition:all .4s ease-out;
+        transition:all .4s ease-out;
+    }
+
+    .portfolio-item.filtered {
+        -webkit-transform:scale(0.5);
+        transform:scale(0.5);
+        opacity:0.2;
+        cursor:default;
+    }
+
+    .no-opacity .portfolio-item.filtered {
+        display:none;
+    }
+
+    .portfolio-item.filtered a{
+        cursor:default;
+    }
+
+    .portfolio-item.filtered .enlarge,
+    .portfolio-item.filtered .link,
+    .portfolio-item.filtered .overlay-mask,
+    .portfolio-item.filtered .project-title{
+        display:none;
+    }
+
+    .portfolio-thumb {
+        display:block;
+        position:relative;
+        box-shadow:0 2px 5px rgba(0,0,0,0.08);
+        overflow:hidden;
+    }
+
+    .scrollimation .portfolio-thumb {
+        -webkit-transform:translateY(100px);
+        transform:translateY(100px);
+        opacity:0;
+        -webkit-transition:opacity .4s ease-out, -webkit-transform .4s ease-out;
+        transition:opacity .4s ease-out, transform .4s ease-out;
+    }
+
+    .touch .scrollimation .portfolio-thumb,
+    .scrollimation .portfolio-thumb.in {
+        -webkit-transform:translateY(0px);
+        transform:translateY(0px);
+        opacity:1;
+    }
+
+    .portfolio-thumb .overlay-mask{
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:#5CC9DF;
+        opacity:0;
+        filter:alpha(opacity=0);
+        z-index:1;
+        -webkit-transition:opacity .3s ease-out;
+        transition:opacity .3s ease-out;
+    }
+
+
+    .portfolio-thumb:hover .overlay-mask {
+        opacity:0.8;
+        filter:alpha(opacity=80);
+    }
+
+    .portfolio-thumb .enlarge,
+    .portfolio-thumb .link{
+        display:inline-block;
+        margin:0;
+        margin-top:-25px;
+        font-size:50px;
+        line-height:50px;
+        color:#fff;
+        opacity:0;
+        filter:alpha(opacity=0);
+        position:absolute;
+        height:50px;
+        width:64px;
+        top:40%;
+        left:50%;
+        text-align:center;
+        z-index:3;
+
+    }
+
+    .portfolio-thumb .enlarge{
+        margin-left:-84px;
+        -webkit-transform:translateX(-200px);
+        transform:translateX(-200px);
+        -webkit-transition:all .3s ease-out;
+        transition:all .3s ease-out;
+    }
+
+    .portfolio-thumb:hover .enlarge{
+        -webkit-transform:translateX(0);
+        transform:translateX(0);
+        opacity:1;
+        filter:alpha(opacity=100);
+        -webkit-transition:all .3s ease-out .3s;
+        transition:all .3s ease-out .3s;
+    }
+
+    .portfolio-thumb .link{
+        margin-left:20px;
+        -webkit-transform:translateX(200px);
+        transform:translateX(200px);
+        -webkit-transition:all .3s ease-out;
+        transition:all .3s ease-out;
+    }
+
+    .portfolio-thumb:hover .link{
+        -webkit-transform:translate(0);
+        transform:translate(0);
+        opacity:1;
+        filter:alpha(opacity=100);
+        -webkit-transition:all .3s ease-out .6s;
+        transition:all .3s ease-out .6s;
+    }
+
+    .portfolio-thumb .enlarge.centered,
+    .portfolio-thumb .link.centered{
+        margin-left:-32px;
+        -webkit-transform:translateY(-200px);
+        transform:translateY(-200px);
+        -webkit-transition-delay:0s;
+        transition-delay:0s;
+    }
+
+    .portfolio-thumb:hover .enlarge.centered,
+    .portfolio-thumb:hover .link.centered{
+        -webkit-transform:translateY(0);
+        transform:translateY(0);
+        -webkit-transition-delay:0.3s;
+        transition-delay:0.3s;
+    }
+
+    .portfolio-thumb .project-title {
+        display:block;
+        width:100%;
+        position:absolute;
+        bottom:-100px;
+        background:#fff;
+        margin:0;
+        padding:20px 0;
+        font-size:21px;
+        font-weight:300;
+        color:#777;
+        text-align:center;
+        z-index:2;
+        -webkit-transition:bottom .4s ease-out,color .2s ease-out;
+        transition:bottom .4s ease-out,color .2s ease-out;
+    }
+
+    .portfolio-thumb:hover .project-title {
+        bottom:0;
+        -webkit-transition:bottom .3s ease-out .1s,color .2s ease-out 0s;
+        transition:bottom .3s ease-out .1s,color .2s ease-out 0s;
+    }
+
+    .portfolio-thumb .project-title:hover {
+        color:#5CC9DF;
+    }
+    <!---->
+    body{
+        margin-top:20px;
+        background-color: #f4f7f6;
+    }
+    .c_review {
+        margin-bottom: 0
+    }
+
+    .c_review li {
+        margin-bottom: 16px;
+        padding-bottom: 13px;
+        border-bottom: 1px solid #e8e8e8
+    }
+
+    .c_review li:last-child {
+        margin: 0;
+        border: none
+    }
+
+    .c_review .avatar {
+        float: left;
+        width: 80px
+    }
+
+    .c_review .comment-action {
+        float: left;
+        width: calc(100% - 80px)
+    }
+
+    .c_review .comment-action .c_name {
+        margin: 0
+    }
+
+    .c_review .comment-action p {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        max-width: 95%;
+        display: block
+    }
+
+    .product_item:hover .cp_img {
+        top: -40px
+    }
+
+    .product_item:hover .cp_img img {
+        box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22)
+    }
+
+    .product_item:hover .cp_img .hover {
+        display: block
+    }
+
+    .product_item .cp_img {
+        position: absolute;
+        top: 0px;
+        left: 50%;
+        transform: translate(-50%);
+        -webkit-transform: translate(-50%);
+        -ms-transform: translate(-50%);
+        -moz-transform: translate(-50%);
+        -o-transform: translate(-50%);
+        -khtml-transform: translate(-50%);
+        width: 100%;
+        padding: 15px;
+        transition: all 0.2s ease-in-out
+    }
+
+    .product_item .cp_img img {
+        transition: all 0.2s ease-in-out;
+        border-radius: 6px
+    }
+
+    .product_item .cp_img .hover {
+        display: none;
+        text-align: center;
+        margin-top: 10px
+    }
+
+    .product_item .product_details {
+        padding-top: 75%;
+        text-align: left;
+    }
+
+    .product_item .product_details h5 {
+        margin-bottom: 5px
+    }
+
+    .product_item .product_details h5 a {
+        font-size: 16px;
+        color: #444
+    }
+
+    .product_item .product_details h5 a:hover {
+        text-decoration: none
+    }
+
+    .product_item .product_details h5 form:hover {
+        text-decoration: none
+    }
+
+    .product_item .product_details .product_price {
+        margin: 0
+    }
+
+    .product_item .product_details .product_price li {
+        display: inline-block;
+        padding: 0 10px
+    }
+
+    .product_item .product_details .product_price .new_price {
+        font-weight: 600;
+        color: #ff4136
+    }
+
+    .product_item_list table tr td {
+        vertical-align: middle
+    }
+
+    .product_item_list table tr td h5 {
+        font-size: 15px;
+        margin: 0
+    }
+
+    .product_item_list table tr td .btn {
+        box-shadow: none !important
+    }
+
+    .product-order-list table tr th:last-child {
+        width: 145px
+    }
+
+    .preview {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column
+    }
+
+    .preview .preview-pic {
+        -webkit-box-flex: 1;
+        -webkit-flex-grow: 1;
+        -ms-flex-positive: 1;
+        flex-grow: 1
+    }
+
+    .preview .preview-thumbnail.nav-tabs {
+        margin-top: 15px;
+        font-size: 0
+    }
+
+    .preview .preview-thumbnail.nav-tabs li {
+        width: 20%;
+        display: inline-block
+    }
+
+    .preview .preview-thumbnail.nav-tabs li nav-link img {
+        max-width: 100%;
+        display: block
+    }
+
+    .preview .preview-thumbnail.nav-tabs li a {
+        padding: 0;
+        margin: 2px;
+        border-radius: 0 !important;
+        border-top: none !important;
+        border-left: none !important;
+        border-right: none !important
+    }
+
+    .preview .preview-thumbnail.nav-tabs li:last-of-type {
+        margin-right: 0
+    }
+
+    .preview .tab-content {
+        overflow: hidden
+    }
+
+    .preview .tab-content img {
+        width: 100%;
+        -webkit-animation-name: opacity;
+        animation-name: opacity;
+        -webkit-animation-duration: .3s;
+        animation-duration: .3s
+    }
+
+    .details {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column
+    }
+
+    .details .rating .stars {
+        display: inline-block
+    }
+
+    .details .sizes .size {
+        margin-right: 10px
+    }
+
+    .details .sizes .size:first-of-type {
+        margin-left: 40px
+    }
+
+    .details .colors .color {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 10px;
+        height: 2em;
+        width: 2em;
+        border-radius: 2px
+    }
+
+    .details .colors .color:first-of-type {
+        margin-left: 20px
+    }
+
+    .details .colors .not-available {
+        text-align: center;
+        line-height: 2em
+    }
+
+    .details .colors .not-available:before {
+        font-family: Material-Design-Iconic-Font;
+        content: "\f136";
+        color: #fff
+    }
+
+    @media screen and (max-width: 996px) {
+        .preview {
+            margin-bottom: 20px
+        }
+    }
+
+    @-webkit-keyframes opacity {
+        0% {
+            opacity: 0;
+            -webkit-transform: scale(3);
+            transform: scale(3)
+        }
+        100% {
+            opacity: 1;
+            -webkit-transform: scale(1);
+            transform: scale(1)
+        }
+    }
+
+    @keyframes opacity {
+        0% {
+            opacity: 0;
+            -webkit-transform: scale(3);
+            transform: scale(3)
+        }
+        100% {
+            opacity: 1;
+            -webkit-transform: scale(1);
+            transform: scale(1)
+        }
+    }
+
+    .cart-page .cart-table tr th:last-child {
+        width: 145px
+    }
+
+    .cart-table .quantity-grp {
+        width: 120px
+    }
+
+    .cart-table .quantity-grp .input-group {
+        margin-bottom: 0
+    }
+
+    .cart-table .quantity-grp .input-group-addon {
+        padding: 0 !important;
+        text-align: center;
+        background-color: #1ab1e3
+    }
+
+    .cart-table .quantity-grp .input-group-addon a {
+        display: block;
+        padding: 8px 10px 10px;
+        color: #fff
+    }
+
+    .cart-table .quantity-grp .input-group-addon a i {
+        vertical-align: middle
+    }
+
+    .cart-table .quantity-grp .form-control {
+        background-color: #fff
+    }
+
+    .cart-table .quantity-grp .form-control+.input-group-addon {
+        background-color: #1ab1e3
+    }
+
+    .ec-checkout .wizard .content .form-group .btn-group.bootstrap-select.form-control {
+        padding: 0
+    }
+
+    .ec-checkout .wizard .content .form-group .btn-group.bootstrap-select.form-control .btn-round.btn-simple {
+        padding-top: 12px;
+        padding-bottom: 12px
+    }
+
+    .ec-checkout .wizard .content ul.card-type {
+        font-size: 0
+    }
+
+    .ec-checkout .wizard .content ul.card-type li {
+        display: inline-block;
+        margin-right: 10px
+    }
+
+    .card {
+        background: #fff;
+        margin-bottom: 30px;
+        transition: .5s;
+        border: 0;
+        border-radius: .55rem;
+        position: relative;
+        width: 100%;
+        box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+    }
+
+    .card .body {
+        font-size: 14px;
+        color: #424242;
+        padding: 20px;
+        font-weight: 400;
+    }
+
+    body{margin-top:20px;}
+    .footer_area {
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+        webkit-box-shadow: 0 8px 48px 8px rgba(47, 91, 234, 0.175);
+        box-shadow: 0 8px 48px 8px rgba(47, 91, 234, 0.175);
+        padding:60px;
+    }
+
+    @-webkit-keyframes bi-cycle {
+        0% {
+            left: 0;
+        }
+        100% {
+            left: 100%;
+        }
+    }
+
+    @keyframes bi-cycle {
+        0% {
+            left: 0;
+        }
+        100% {
+            left: 100%;
+        }
+    }
+    ol li, ul li {
+        list-style: none;
+    }
+
+    ol, ul {
+        margin: 0;
+        padding: 0;
+    }
+</style>
 
 </body>
 </html>

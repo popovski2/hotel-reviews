@@ -69,7 +69,7 @@
                         <div class="product_details">
                             <h5 th:text="${hotel.getHotelName()}"></h5>
                             <ul class="product_price list-unstyled">
-                                <li style="width:300px; display:block; text-align:left" th:text="'Description: ' + ${hotel.getDescription()}"></li>
+                                <li style="padding: 0;width:240px; display:block; text-align:left" th:text="'Description: ' + ${hotel.getDescription()}"></li>
                             </ul>
                         </div>
                     </div>
@@ -79,9 +79,6 @@
         </div>
     </div>
 
-
-
-    </br>
     </br>
 
 
@@ -497,8 +494,8 @@
     }
 
     .product_item .product_details {
-        padding-top: 110%;
-        text-align: center
+        padding-top: 75%;
+        text-align: left;
     }
 
     .product_item .product_details h5 {

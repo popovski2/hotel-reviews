@@ -37,6 +37,13 @@
 
 <br/>
 
+<div class="container" th:if="${searchHotels.size() == 0}">
+    <div style="justify-content: center; padding-left: 200px;">
+    <h2 style="display: flex" width="600px" height="400px">There are no hotels with that name/address</h2>
+    </div>
+</div>
+
+
 <th:block xmlns:th="http://www.thymeleaf.org">
 
 

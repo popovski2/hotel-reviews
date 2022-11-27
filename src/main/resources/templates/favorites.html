@@ -67,7 +67,7 @@
         <div th:each="hotel : ${favorites}" class="col-md-6 col-xl-3 portfolio-item" th:classappend="${hotel.getHotelName()}">
             <div class="card product_item m-b-30" >
                 <div class="card-body row">
-                    <div class="cp_img col-6">
+                    <div class="cp_img col-12">
                         <img th:src="${hotel.getImageUrl()}" alt="Product" class="img-fluid">
 
                         </br>
@@ -76,9 +76,6 @@
                                 <a style="display: inline-block;" th:href="@{'/hotel-details/{id}' (id=${hotel.getId()})}" class="btn btn-secondary btn-sm waves-effect"><i class="zmdi ">Details</i></a>
                             </th:block>
                         </div>
-
-                        </br>
-
 
 
                         <div class="hover">

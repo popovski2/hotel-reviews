@@ -28,6 +28,13 @@ public class DataInitializer {
 
         this.hotelService.create("ZHotel","Address","https://media.istockphoto.com/id/104731717/photo/luxury-resort.jpg?s=612x612&w=0&k=20&c=cODMSPbYyrn1FHake1xYz9M8r15iOfGz9Aosy9Db7mI=","DescriptionDescription");
         this.hotelService.create("CHotel","Address","https://media.istockphoto.com/id/104731717/photo/luxury-resort.jpg?s=612x612&w=0&k=20&c=cODMSPbYyrn1FHake1xYz9M8r15iOfGz9Aosy9Db7mI=","Description");
+        this.hotelService.create("ZHotel","Address","https://media.istockphoto.com/id/104731717/photo/luxury-resort.jpg?s=612x612&w=0&k=20&c=cODMSPbYyrn1FHake1xYz9M8r15iOfGz9Aosy9Db7mI=","DescriptionDescription");
+        this.hotelService.create("ZHotel","Address","https://media.istockphoto.com/id/104731717/photo/luxury-resort.jpg?s=612x612&w=0&k=20&c=cODMSPbYyrn1FHake1xYz9M8r15iOfGz9Aosy9Db7mI=","DescriptionDescription");
+        this.hotelService.create("ZHotel","Address","https://media.istockphoto.com/id/104731717/photo/luxury-resort.jpg?s=612x612&w=0&k=20&c=cODMSPbYyrn1FHake1xYz9M8r15iOfGz9Aosy9Db7mI=","DescriptionDescription");
+        this.hotelService.create("ZHotel","Address","https://media.istockphoto.com/id/104731717/photo/luxury-resort.jpg?s=612x612&w=0&k=20&c=cODMSPbYyrn1FHake1xYz9M8r15iOfGz9Aosy9Db7mI=","DescriptionDescription");
+        this.hotelService.create("ZHotel","Address","https://media.istockphoto.com/id/104731717/photo/luxury-resort.jpg?s=612x612&w=0&k=20&c=cODMSPbYyrn1FHake1xYz9M8r15iOfGz9Aosy9Db7mI=","DescriptionDescription");
+
+
 
         for (int i = 0; i <10 ; i++) {
             this.hotelService.create("Hotel"+i,"Address"+i,"https://media.istockphoto.com/id/104731717/photo/luxury-resort.jpg?s=612x612&w=0&k=20&c=cODMSPbYyrn1FHake1xYz9M8r15iOfGz9Aosy9Db7mI=","DescriptionDescriptionDescriptioDescription");
