@@ -3,10 +3,11 @@ package com.petarpopovski.hotelreviews.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
-public class Review {
+public class Review implements Serializable {
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +42,9 @@ public class Review {
         this.likes = likes;
         this.usersLiked = usersLiked;
         this.usersDisiked = usersDisiked;
+    }
+
+    public Review() {
     }
 
     public Long getId() {

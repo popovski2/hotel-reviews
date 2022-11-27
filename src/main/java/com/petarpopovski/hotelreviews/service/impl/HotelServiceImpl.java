@@ -1,11 +1,13 @@
 package com.petarpopovski.hotelreviews.service.impl;
 
 import com.petarpopovski.hotelreviews.model.Hotel;
+import com.petarpopovski.hotelreviews.model.exceptions.InvalidHotelIdException;
 import com.petarpopovski.hotelreviews.repository.HotelRepository;
 import com.petarpopovski.hotelreviews.service.interfaces.HotelService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class HotelServiceImpl implements HotelService {
@@ -22,8 +24,9 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public Hotel findById(Long hotelId) {
-        return this.hotelRepository.findById(hotelId).orElseThrow();
+    public Optional<Hotel> findById(Long hotelId)
+    {
+        return Optional.ofNullable(this.hotelRepository.findById(hotelId).orElseThrow(() -> new InvalidHotelIdException(hotelId)));
     }
 
     @Override
@@ -46,7 +49,7 @@ public class HotelServiceImpl implements HotelService {
     @Override
     public Hotel update(Long hotelId, String hotelName, String address, String imageUrl, String description) {
 
-        Hotel hotel = this.hotelRepository.findById(hotelId).orElseThrow();
+        Hotel hotel = this.hotelRepository.findById(hotelId).orElseThrow(() -> new InvalidHotelIdException(hotelId));
         hotel.setHotelName(hotelName);
         hotel.setAddress(address);
         hotel.setImageUrl(imageUrl);
@@ -57,7 +60,7 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public Hotel delete(Long hotelId) {
-        Hotel hotelForDeletion = this.hotelRepository.findById(hotelId).orElseThrow();
+        Hotel hotelForDeletion = this.hotelRepository.findById(hotelId).orElseThrow(() -> new InvalidHotelIdException(hotelId));
         this.hotelRepository.delete(hotelForDeletion);
         return hotelForDeletion;
     }

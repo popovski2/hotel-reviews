@@ -3,12 +3,13 @@ package com.petarpopovski.hotelreviews.service.interfaces;
 import com.petarpopovski.hotelreviews.model.Hotel;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface HotelService {
 
     List<Hotel> listAllHotels();
 
-    Hotel findById(Long hotelId);
+    Optional<Hotel> findById(Long hotelId);
 
     List<Hotel> listAllByAddress(String address);
 

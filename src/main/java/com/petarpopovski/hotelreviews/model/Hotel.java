@@ -3,10 +3,11 @@ package com.petarpopovski.hotelreviews.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
-public class Hotel {
+public class Hotel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,8 +33,7 @@ public class Hotel {
         this.address = address;
         this.imageUrl = imageUrl;
         this.description = description;
-        this.reviews = reviews;
-        this.overralRating = overralRating;
+        this.overralRating=0.0;
     }
 
     public Hotel() {

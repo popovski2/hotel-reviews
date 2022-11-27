@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Add hotel</title>
+
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+</head>
+
+<body>
+
+<!-- USING THE HEADER FRAGMENT FROM FRAGMENTS/HEADER-->
+<div th:replace="fragments/header :: header"></div>
+
+
+<section class="pt-5 pb-5 mt-0 align-items-center d-flex jumbotron">
+    <div class="container" style="background-image: url('https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F9%2F2021%2F01%2F12%2Fmore-wine-tariffs-imposed-on-france-and-germany-FT-BLOG0121.jpg'); opacity: 0.9; background-size: cover; height: 40vh;">
+        <div class="justify-content-center align-items-center d-flex text-center h-100">
+            <div class="col-12 col-md-8  h-50 ">
+                <div>
+                    <h1 th:if="${hotel} != null" class="display-2  text-light mb-2 mt-5 jumbotron-heading">Edit hotel</h1>
+                    <h1 th:if="${hotel} == null" class="display-2  text-light mb-2 mt-5 jumbotron-heading">Add hotel</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <form action="/hotels/add" method="POST">
+                <input id="id" type="hidden" name="id" th:value="(${hotel} != null ? ${hotel.getId()} : '')">
+                <div class="form-group">
+                    <label for="name">Hotel name</label>
+                    <input type="text"
+                           class="form-control"
+                           id="name"
+                           name="name"
+                           th:value="(${hotel} != null ? ${hotel.getHotelName()} : '')"
+                           required
+                           placeholder="Enter hotel name">
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text"
+                           class="form-control"
+                           id="address"
+                           name="address"
+                           th:value="(${hotel} != null ? ${hotel.getAddress()} : '')"
+                           placeholder="Price">
+                </div>
+
+                <div class="form-group">
+                    <label for="imageUrl">Image URL</label>
+                    <input type="text"
+                           class="form-control"
+                           id="imageUrl"
+                           name="imageUrl"
+                           th:value="(${hotel} != null ? ${hotel.getImageUrl()} : '')"
+                           placeholder="Image Url">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <input type="text"
+                           class="form-control"
+                           id="description"
+                           name="description"
+                           th:value="(${hotel} != null ? ${hotel.getDescription()} : '')"
+                           placeholder="Description for the hotel">
+                </div>
+
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a type="button" class="btn btn-primary" href="/hotels">Back</a>
+            </form>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+
+<!-- USING THE FOOTER FRAGMENT FROM FRAGMENTS/FOOTER-->
+<div th:replace="fragments/footer :: footer"></div>
+
+</body>
+</html>

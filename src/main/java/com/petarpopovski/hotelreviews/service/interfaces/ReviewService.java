@@ -5,6 +5,7 @@ import com.petarpopovski.hotelreviews.model.Review;
 import com.petarpopovski.hotelreviews.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ReviewService {
 
@@ -12,7 +13,7 @@ public interface ReviewService {
 
     List<Review> listAllReviewsByHotel(Long hotelId);
 
-    Review findById(Long reviewId);
+    Optional<Review> findById(Long reviewId);
 
     Review create(Long authorId, Long hotelId, Integer grade, String description);
 

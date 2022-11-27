@@ -4,8 +4,7 @@ import com.petarpopovski.hotelreviews.model.Hotel;
 import com.petarpopovski.hotelreviews.model.Review;
 import com.petarpopovski.hotelreviews.model.User;
 import com.petarpopovski.hotelreviews.model.enumerations.Role;
-import com.petarpopovski.hotelreviews.model.exceptions.InvalidRoleException;
-import com.petarpopovski.hotelreviews.model.exceptions.InvalidUserArgumentsException;
+import com.petarpopovski.hotelreviews.model.exceptions.*;
 import com.petarpopovski.hotelreviews.repository.HotelRepository;
 import com.petarpopovski.hotelreviews.repository.ReviewRepository;
 import com.petarpopovski.hotelreviews.repository.UserRepository;
@@ -72,6 +71,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         String encryptedPassword = this.passwordEncoder.encode(password);
         User user = new User(email, displayName, encryptedPassword, Role.REGULAR_USER);
+        System.out.println("registered user is: "+ user.getDisplayName());
         return userRepository.save(user);
     }
 
@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new InvalidUserArgumentsException();
         }
         String encryptedPassword = this.passwordEncoder.encode(password);
-        User user = new User(email, displayName, encryptedPassword, Role.ADMINISTRATOR);
+        User user = new User(email, displayName, encryptedPassword, Role.ADMIN);
         return userRepository.save(user);
     }
 
@@ -94,8 +94,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void addHotelToFavorites(Long userId, Long hotelId) {
-        User user = this.userRepository.findById(userId).orElseThrow();
-        Hotel hotel = this.hotelRepository.findById(hotelId).orElseThrow();
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new InvalidUserIdException(userId));
+        Hotel hotel = this.hotelRepository.findById(hotelId).orElseThrow(() -> new InvalidHotelIdException(hotelId));
         if(user.getRole().equals(Role.REGULAR_USER)) {
             user.getFavorites().add(hotel);
         }
@@ -105,8 +105,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void removeHotelFromFavorites(Long userId, Long hotelId) {
-        User user = this.userRepository.findById(userId).orElseThrow();
-        Hotel hotel = this.hotelRepository.findById(hotelId).orElseThrow();
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new InvalidUserIdException(userId));
+        Hotel hotel = this.hotelRepository.findById(hotelId).orElseThrow(() -> new InvalidHotelIdException(hotelId));
 
         if(user.getRole().equals(Role.REGULAR_USER)) {
             user.getFavorites().remove(hotel);
@@ -117,16 +117,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void likeReview(Long userId, Long reviewId) {
-        User user = this.userRepository.findById(userId).orElseThrow();
-        Review review = this.reviewRepository.findById(reviewId).orElseThrow();
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new InvalidUserIdException(userId));
+        Review review = this.reviewRepository.findById(reviewId).orElseThrow(() -> new InvalidReviewIdException(reviewId));
         review.setLikes(review.getLikes()+1);
         review.addLikeFromUser(user);
     }
 
     @Override
     public void removeLikeFromReview(Long userId, Long reviewId) {
-        User user = this.userRepository.findById(userId).orElseThrow();
-        Review review = this.reviewRepository.findById(reviewId).orElseThrow();
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new InvalidUserIdException(userId));
+        Review review = this.reviewRepository.findById(reviewId).orElseThrow(() -> new InvalidReviewIdException(reviewId));
         review.setLikes(review.getLikes()-1);
         review.removeLikeFromUser(user);
 
@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.userRepository.findUserByDisplayName(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return this.userRepository.findByEmail(email);
     }
 }
