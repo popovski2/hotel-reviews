@@ -28,6 +28,11 @@ public class FavoritesController {
         this.userService = userService;
     }
 
+    /**
+     * [GET]
+     * @desc Returns the favorites page with the model populated with the favorite hotels of the logged in user
+     * @returns {String} favorites view with or without error message
+     */
     @GetMapping
     public String getFavoritesPage(@RequestParam(required = false)String error,
                                       HttpServletRequest request,
@@ -42,21 +47,26 @@ public class FavoritesController {
         User user = this.userService.getUserByEmail(email);
         Set<Hotel> favorites = user.getFavorites();
 
-
         model.addAttribute("favorites",favorites);
         return "favorites";
     }
 
+
+
+
     /**
-     *                      *
-     *      ADD FAVORITE    *
-     *                      *
-     *                      **/
+     * [POST]
+     * @desc Adds Hotel object with provided id to the favorites list of the logged in user
+     * @returns {String} favorites view with or without error message
+     */
     @PostMapping("/add/{id}")
     public String addHotelToFavorites(@PathVariable Long id, HttpServletRequest request, Authentication authentication, Model model){
         try{
             User user = (User) authentication.getPrincipal();
+            System.out.println("User " + user.getDisplayName());
             this.userService.addHotelToFavorites(user.getId(),id);
+            System.out.println("hotel is added to favorites " + id);
+
             return "redirect:/favorites";
         } catch (RuntimeException exception){
             return "redirect:/favorites?error="+ exception.getMessage();
@@ -65,15 +75,13 @@ public class FavoritesController {
 
 
 
-
-
     /**
-     *                      *
-     *         DELETE       *
-     *                      *
-     *                      **/
+     * [DELETE]
+     * @desc Deletes the Hotel object with provided id from the favorites list of the logged in user
+     * @returns {String} favorites view with or without error message
+     */
     @DeleteMapping("/delete/{id}")
-    public String deleteWineFromShoppingCart(@PathVariable Long id, Authentication authentication, Model model){
+    public String deleteHotelFromFavorites(@PathVariable Long id, Authentication authentication, Model model){
         try {
             User user = (User) authentication.getPrincipal();
             this.userService.removeHotelFromFavorites(user.getId(),id);
@@ -84,6 +92,12 @@ public class FavoritesController {
         }
     }
 
+
+    /**
+     * [DELETE]
+     * @desc Deletes all the Hotel objects from the favorites list of the logged in user
+     * @returns {String} favorites view with or without error message
+     */
     @DeleteMapping("/emptyFavorites")
     public String emptyFavorites(Authentication authentication, Model model){
         try{

@@ -25,6 +25,11 @@ public class HotelDetailsController {
         this.reviewService = reviewService;
     }
 
+    /**
+     * [GET]
+     * @desc The model is populated with the particular hotel's details and returns the Hotel details page
+     * @returns {String} hotel-details view
+     */
     @GetMapping("{id}")
     public String getHotelDetailsPage(@RequestParam(required = false)String error, @PathVariable Long id, Model model){
 

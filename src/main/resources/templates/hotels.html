@@ -74,7 +74,7 @@
                         <div class="hover">
                         <th:block sec:authorize="hasAuthority('REGULAR_USER')">
                             <form style="display: inline-block;" th:action="@{'/favorites/add/{id}' (id=${hotel.getId()})}" th:method="POST">
-                                <button type="submit" class="btn btn-danger btn-sm waves-effect"><i class="zmdi ">Add to favorites</i></button>
+                                <button type="submit" class="btn btn-danger btn-sm waves-effect"><i class="zmdi">Add to favorites</i></button>
                             </form>
                         </th:block>
                         </div>
@@ -108,6 +108,8 @@
                     <div class="product_details">
                         <h5 th:text="${hotel.getHotelName()}"></h5>
                         <ul class="product_price list-unstyled">
+                            <li class="old_price" th:text="${hotel.getAddress()}"></li>
+                            </br>
                             <li class="old_price" th:text="'Rating: ' + ${#numbers.formatDecimal(hotel.getOverralRating(),0, 'COMMA', 1, 'POINT')} + '☆'"></li>
                         </ul>
                     </div>

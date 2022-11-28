@@ -18,18 +18,19 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
 
 
-    /** we need this in order to put the logged in user into session **/
+
     private HttpSession session=null;
-
-
     private final UserService userService;
-
-
     public LoginController(UserService userService) {
         this.userService = userService;
     }
 
 
+    /**
+     * [GET]
+     * @desc Returns page with login form
+     * @returns {String} login view
+     */
     @GetMapping
     public String getLoginPage(@RequestParam(required = false) String error, Model model){
         if(error!=null && !error.isEmpty()) {
@@ -40,6 +41,12 @@ public class LoginController {
     }
 
 
+    /**
+     * [POST]
+     * @desc Gets the user from the request with its username(email) and the password and calls the service layer for the login functionality.
+     * Also, the users email is put into session to display it on the frontend as welcoming message.
+     * @returns {String} home view
+     */
     @PostMapping
     public String login(HttpServletRequest request, Model model){
         User user = null;

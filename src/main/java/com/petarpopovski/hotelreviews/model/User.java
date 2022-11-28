@@ -26,13 +26,11 @@ public class User implements Serializable, UserDetails {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     private Set<Hotel> favorites;
 
     @OneToMany(mappedBy = "author", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Review> reviews;
-
-
 
 
     private boolean isAccountNonExpired = true;
@@ -108,6 +106,7 @@ public class User implements Serializable, UserDetails {
     public void setCredentialsNonExpired(boolean credentialsNonExpired) {
         isCredentialsNonExpired = credentialsNonExpired;
     }
+
 
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;

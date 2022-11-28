@@ -32,6 +32,12 @@ public class RegisterController {
     }
 
 
+
+    /**
+     * [GET]
+     * @desc Returns page with register form
+     * @returns {String} register view
+     */
     @GetMapping
     public String getRegisterPage(@RequestParam(required = false) String error, Model model){
         if(error != null && !error.isEmpty()) {
@@ -42,6 +48,13 @@ public class RegisterController {
     }
 
 
+
+    /**
+     * [POST]
+     * @desc Registers the user with provided details from the register form by making call to the service layer function registerAsRegular().
+     * Also, after the registration, the user is automatically logged in to the application.
+     * @returns {String} home view
+     */
     @PostMapping
     public String register(HttpServletRequest request,
                            @RequestParam String username,
@@ -50,7 +63,7 @@ public class RegisterController {
         try {
             this.userService.registerAsRegular(username,name,password);
 
-            // AUTO LOGIN AFTER REGISTRATION
+            // Auto login after registration
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,password);
             System.out.println(" authenticationToken credentials: "+authenticationToken.getCredentials() +" authenticaionToken getDetails: "+authenticationToken.getDetails());
             authenticationToken.setDetails(new WebAuthenticationDetails(request));

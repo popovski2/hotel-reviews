@@ -31,14 +31,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
-//        auth.inMemoryAuthentication()
-//                .withUser("petarpopovski@gmail.com")
-//                .password(passwordEncoder.encode("12345"))
-//                .authorities("ROLE_USER")
-//                .and()
-//                .withUser("admin")
-//                .password(passwordEncoder.encode("admin"))
-//                .authorities("ROLE_ADMIN");
         auth.authenticationProvider(authenticationProvider);
     }
 

@@ -26,10 +26,6 @@ public class Review implements Serializable {
 
         private String description;
 
-        // private Integer likes;
-
-        //private Integer dislikes;
-
         @ManyToMany(cascade = CascadeType.REMOVE)
         private Set<User> usersLiked;
 

@@ -22,7 +22,10 @@ public class HomeController {
         this.hotelService = hotelService;
     }
 
-
+    /**
+     * @desc Populates the model with 4 hotel objects and returns the index view page as home page of the application.
+     * @returns {String} index view
+     */
     @GetMapping
     public String getHomePage(@RequestParam(required = false)String error, Model model){
 

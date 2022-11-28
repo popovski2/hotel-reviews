@@ -14,8 +14,6 @@ import java.util.List;
 public class UsersController {
 
     private final UserService userService;
-
-
     public UsersController(UserService userService) {
         this.userService = userService;
     }
@@ -23,6 +21,12 @@ public class UsersController {
 
 
 
+    /**
+     * [GET]
+     * @desc Populate the model with all the users from the databaset.
+     * Only the admin has the exclusive right to execute this function.
+     * @returns {String} users view
+     */
     @GetMapping
     public String getUsersPage(@RequestParam(required = false)String error, Model model){
         if(error!= null && !error.isEmpty()){
@@ -34,31 +38,47 @@ public class UsersController {
         return "users";
     }
 
-    @GetMapping("/addAdministrator")
+    /**
+     * [GET]
+     * @desc Returns the page with form for adding new administrator.
+     * Only the admin has the exclusive right to execute this function.
+     * @returns {String} add-administrator view
+     */
+    @GetMapping("/admin/addAdministrator")
     public String addAdministratorPage(){
         return "add-administrator";
     }
 
 
-    @PostMapping("/add")
+    /**
+     * [POST]
+     * @desc Populate the model with all information needed for creating new administrator.
+     * Only the admin has the exclusive right to execute this function.
+     * @returns {String} users view
+     */
+    @PostMapping("/admin/add")
     public String addAdministrator(@RequestParam String email,
                                    @RequestParam String displayName,
                                    @RequestParam String password){
 
-try {
+    try {
     this.userService.registerAsAdministrator(email, displayName, password);
-}
-catch (UserAlreadyExistsException exception){
+    }
+    catch (UserAlreadyExistsException exception){
     return "redirect:/users/addAdministrator?error=" + exception.getMessage();
-}
+    }
         return "redirect:/users";
 
     }
 
 
-
-
-    @DeleteMapping("/delete/{userId}")
+    /**
+     * [DELETE]
+     * @desc Deletes an user from the database.
+     * Only the admin has the exclusive right to execute this function.
+     * @returns {String} users view
+     */
+    @DeleteMapping("/admin/delete/{userId}")
     public String deleteUser(@PathVariable Long userId){
         this.userService.delete(userId);
         return "redirect:/users";

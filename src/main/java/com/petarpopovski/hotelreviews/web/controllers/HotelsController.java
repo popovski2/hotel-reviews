@@ -26,22 +26,32 @@ public class HotelsController {
     }
 
 
+    /**
+     * [GET]
+     * @desc Populates the model with all hotels from the database sorted by name in ascending order and returns the hotels view.
+     * Both the REGULAR_USER and ADMIN users have the rights to execute this function.
+     * @returns {String} hotels view
+     */
     @GetMapping
     public String getHotelsPage(@RequestParam(required = false)String error, Model model){
 
-        //  if there is some error, put it into the model in order to display it on frontend
         if(error !=null && !error.isEmpty()){
             model.addAttribute("hasError",true);
             model.addAttribute("error",error);
         }
 
-        //  get all hotels
-        List<Hotel> hotels = this.hotelService.listAllHotels();
-        model.addAttribute("hotels",hotels);
-
+        List<Hotel> hotels = this.hotelService.listAllHotels(); // make call to the service layer
+        model.addAttribute("hotels",hotels);    // populate the model with the hotels
         return "hotels";
     }
 
+
+    /**
+     * [GET]
+     * @desc Populates the model with the result from the search and returns the search result view.
+     * Both the REGULAR_USER and ADMIN users have the rights to execute this function.
+     * @returns {String} search-result view
+     */
     @GetMapping("/search")
     public String searchHotels(@RequestParam String searchText, Model model){
 
@@ -58,12 +68,12 @@ public class HotelsController {
     }
 
 
-
-    /**                             *
-     *                              *
-     *          GET EDIT HOTEL      *
-     *                              *
-     * **/
+    /**
+     * [GET]
+     * @desc Populates the model with the hotel's details and returning the page with edit form for the hotel.
+     * Only the admin has the exclusive right to execute this function.
+     * @returns {String} add-hotel view or redirect to hotels with error message
+     */
     @GetMapping("/admin/edit-form/{id}")
     public String editHotelPage(@PathVariable Long id, Model model){
         if(this.hotelService.findById(id).isPresent()){
@@ -77,24 +87,26 @@ public class HotelsController {
         return "redirect:/hotels?error=HotelNotFound";
     }
 
-    /**                             *
-     *                              *
-     *          GET ADD HOTEL       *
-     *                              *
-     * **/
 
 
+    /**
+     * [GET]
+     * @desc Returns the page with form for adding the hotel.
+     * Only the admin has the exclusive right to execute this function.
+     * @returns {String} add-hotel view
+     */
     @GetMapping("/admin/add-form")
     public String addHotelPage(Model model){
                 return "add-hotel";
     }
 
-    /**                             *
-     *                              *
-     *         POST ADD HOTEL       *
-     *                              *
-     * **/
 
+    /**
+     * [POST]
+     * @desc Creates a hotel object with the provided details or updates depending on whether the id of the hotel is sent in the request.
+     * Only the admin has the exclusive right to execute this function.
+     * @returns {String} redirect to hotels view
+     */
     @PostMapping("/admin/add")
     public String saveHotel(  @RequestParam(required = false) Long id,
                               @RequestParam String name,
@@ -114,12 +126,11 @@ public class HotelsController {
         return "redirect:/hotels";
     }
 
-    /**                             *
-     *                              *
-     *         DELETE HOTEL         *
-     *                              *
-     * **/
-
+    /**
+     * [DELETE]
+     * @desc Deletes hotel with the provided id. Only the admin has the exclusive right to execute this function.
+     * @returns {String} redirect to hotels view
+     */
     @DeleteMapping("/admin/delete/{id}")
     public String deleteHotel(@PathVariable Long id){
         this.hotelService.delete(id);
