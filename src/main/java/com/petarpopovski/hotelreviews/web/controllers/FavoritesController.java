@@ -63,9 +63,7 @@ public class FavoritesController {
     public String addHotelToFavorites(@PathVariable Long id, HttpServletRequest request, Authentication authentication, Model model){
         try{
             User user = (User) authentication.getPrincipal();
-            System.out.println("User " + user.getDisplayName());
             this.userService.addHotelToFavorites(user.getId(),id);
-            System.out.println("hotel is added to favorites " + id);
 
             return "redirect:/favorites";
         } catch (RuntimeException exception){

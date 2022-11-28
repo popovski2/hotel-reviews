@@ -98,6 +98,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Hotel hotel = this.hotelRepository.findById(hotelId).orElseThrow(() -> new InvalidHotelIdException(hotelId));
         if(user.getRole().equals(Role.REGULAR_USER)) {
             user.getFavorites().add(hotel);
+            this.userRepository.save(user);
         }
         else throw new InvalidRoleException(user.getDisplayName());
 
@@ -110,6 +111,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         if(user.getRole().equals(Role.REGULAR_USER)) {
             user.getFavorites().remove(hotel);
+            this.userRepository.save(user);
         }
         else throw new InvalidRoleException(user.getDisplayName());
     }
@@ -118,6 +120,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public void removeAllFromFavorites(Long userId) {
         User user = this.userRepository.findById(userId).orElseThrow(() -> new InvalidUserIdException(userId));
         user.getFavorites().clear();
+        this.userRepository.save(user);
     }
 
     @Override
@@ -129,6 +132,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             removeDislikeFromReview(userId,reviewId);
         }
         review.addLikeFromUser(user);
+        this.reviewRepository.save(review);
     }
 
     @Override
@@ -136,6 +140,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = this.userRepository.findById(userId).orElseThrow(() -> new InvalidUserIdException(userId));
         Review review = this.reviewRepository.findById(reviewId).orElseThrow(() -> new InvalidReviewIdException(reviewId));
         review.removeLikeFromUser(user);
+
+        this.reviewRepository.save(review);
 
     }
 
@@ -148,6 +154,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         review.addDislikeFromUser(user);
 
+        this.reviewRepository.save(review);
+
     }
 
     @Override
@@ -155,6 +163,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = this.userRepository.findById(userId).orElseThrow();
         Review review = this.reviewRepository.findById(reviewId).orElseThrow();
         review.removeDislikeFromUser(user);
+
+        this.reviewRepository.save(review);
 
     }
 
