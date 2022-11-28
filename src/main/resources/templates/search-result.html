@@ -61,7 +61,7 @@
             <div th:each="hotel : ${searchHotels}" class="col-md-6 col-xl-3 portfolio-item" th:classappend="${hotel.getHotelName()}">
                 <div class="card product_item m-b-30" >
                     <div class="card-body row">
-                        <div class="cp_img col-12">
+                        <div class="cp_img col-10">
                             <img th:src="${hotel.getImageUrl()}" alt="Product" class="img-fluid">
 
                             </br>
@@ -105,7 +105,7 @@
                         <div class="product_details">
                             <h5 th:text="${hotel.getHotelName()}"></h5>
                             <ul class="product_price list-unstyled">
-                                <li class="old_price" th:text="'Rating: ' + ${#numbers.formatDecimal(hotel.getOverralRating(),0, 'COMMA', 1, 'POINT')}"></li>
+                                <li class="old_price" th:text="'Rating: ' + ${#numbers.formatDecimal(hotel.getOverralRating(),0, 'COMMA', 1, 'POINT')} + '☆'"></li>
                             </ul>
                         </div>
                     </div>
@@ -438,7 +438,7 @@
     }
 
     .product_item .product_details {
-        padding-top: 110%;
+        padding-top: 115%;
         text-align: center
     }
 

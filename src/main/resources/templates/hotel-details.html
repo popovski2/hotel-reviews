@@ -69,7 +69,7 @@
                         <div class="product_details">
                             <h5 th:text="${hotel.getHotelName()}"></h5>
                             <ul class="product_price list-unstyled">
-                                <li style="padding: 0;width:240px; display:block; text-align:left" th:text="'Description: ' + ${hotel.getDescription()}"></li>
+                                <li style="padding: 0;width:240px; display:block; text-align:left" th:text="${hotel.getDescription()}"></li>
                             </ul>
                         </div>
                     </div>
@@ -139,7 +139,7 @@
                             </td>
 
 
-                            <td style="width: 50px;" th:text="${rev.getDescription() + 'dddddddddddddd'}"></td>
+                            <td style="width: 50px;" th:text="${rev.getDescription()}"></td>
 
                             <!-- LIKE / DISLIKE -->
                             <td class="text-right">
@@ -494,7 +494,7 @@
     }
 
     .product_item .product_details {
-        padding-top: 75%;
+        padding-top: 100%;
         text-align: left;
     }
 

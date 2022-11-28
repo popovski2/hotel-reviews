@@ -1,5 +1,6 @@
 package com.petarpopovski.hotelreviews.web.controllers;
 
+import com.petarpopovski.hotelreviews.model.Geolocation;
 import com.petarpopovski.hotelreviews.model.Hotel;
 import com.petarpopovski.hotelreviews.model.Review;
 import com.petarpopovski.hotelreviews.service.interfaces.HotelService;
@@ -99,12 +100,15 @@ public class HotelsController {
                               @RequestParam String name,
                               @RequestParam String address,
                               @RequestParam String imageUrl,
-                              @RequestParam String description
+                              @RequestParam String description,
+                              @RequestParam Double longitude,
+                              @RequestParam Double latitude
+
                               ) {
         if (id != null) {
-            this.hotelService.update(id,name,address,imageUrl,description);
+            this.hotelService.update(id,name,address,imageUrl,description, new Geolocation(longitude,latitude));
         } else {
-            this.hotelService.create(name,address,imageUrl,description);
+            this.hotelService.create(name,address,imageUrl,description,new Geolocation(longitude,latitude));
         }
 
         return "redirect:/hotels";

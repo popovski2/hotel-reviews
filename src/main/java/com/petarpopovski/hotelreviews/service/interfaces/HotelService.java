@@ -1,5 +1,6 @@
 package com.petarpopovski.hotelreviews.service.interfaces;
 
+import com.petarpopovski.hotelreviews.model.Geolocation;
 import com.petarpopovski.hotelreviews.model.Hotel;
 
 import java.util.List;
@@ -17,9 +18,9 @@ public interface HotelService {
 
     List<Hotel> search(String searchText);
 
-    Hotel create(String hotelName, String address, String imageUrl, String description);
+    Hotel create(String hotelName, String address, String imageUrl, String description, Geolocation geolocation);
 
-    Hotel update(Long hotelId, String hotelName, String address, String imageUrl, String description);
+    Hotel update(Long hotelId, String hotelName, String address, String imageUrl, String description, Geolocation geolocation);
 
     Hotel delete(Long hotelId);
 

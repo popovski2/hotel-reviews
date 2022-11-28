@@ -21,74 +21,89 @@ public class Hotel implements Serializable, Comparable<Hotel> {
 
     private String description;
 
-//    Geolocation
+    //because i try to save the hotel without firstly creating geolocation
+    @OneToOne(cascade=CascadeType.PERSIST)
+    private Geolocation geolocation;
 
     @OneToMany(mappedBy = "hotel",  fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Review> reviews;
 
     private Double overralRating;
 
-    public Hotel(String hotelName, String address, String imageUrl, String description) {
+    /** CONSTRUCTORS **/
+    public Hotel(String hotelName, String address, String imageUrl, String description, Geolocation geolocation) {
         this.hotelName = hotelName;
         this.address = address;
         this.imageUrl = imageUrl;
         this.description = description;
         this.overralRating=0.0;
+        this.geolocation=geolocation;
     }
 
     public Hotel() {
+    }
+
+
+    /** GETTERS **/
+    public Geolocation getGeolocation() {
+        return geolocation;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getHotelName() {
         return hotelName;
-    }
-
-    public void setHotelName(String hotelName) {
-        this.hotelName = hotelName;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public List<Review> getReviews() {
+        return reviews;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public Double getOverralRating() {
+        return overralRating;
     }
 
     public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+
+    /** SETTERS **/
+
+    public void setGeolocation(Geolocation geolocation) {
+        this.geolocation = geolocation;
     }
 
-    public String getDescription() {
-        return description;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
-    }
-
-    public Double getOverralRating() {
-        return overralRating;
     }
 
     public void setOverralRating(Double overralRating) {

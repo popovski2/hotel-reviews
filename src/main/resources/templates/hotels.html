@@ -20,8 +20,10 @@
 <div th:replace="fragments/header :: header"> </div>
 
 
-<section class="pt-5 pb-5 mt-0 align-items-center d-flex jumbotron">
-    <div class="container" style="background-image: url('https://www.tropical-landscaping.com/files/2314/8360/4749/banner01.jpg'); opacity: 0.9; background-size: cover; height: 40vh;">
+<section class="pt-5 pb-5 mt-0 align-items-center d-flex jumbotron" >
+
+
+    <div class="container" style="background-image: url('https://wallpaperaccess.com/full/2690549.jpg'); opacity: 0.9; background-size: cover; height: 40vh;">
         <div class="justify-content-center align-items-center d-flex text-center h-100">
             <div class="col-12 col-md-8  h-50 ">
                 <div>
@@ -30,6 +32,7 @@
             </div>
         </div>
     </div>
+
 </section>
 
 <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
@@ -57,7 +60,7 @@
         <div th:each="hotel : ${hotels}" class="col-md-6 col-xl-3 portfolio-item" th:classappend="${hotel.getHotelName()}">
             <div class="card product_item m-b-30" >
                 <div class="card-body row">
-                    <div class="cp_img col-12">
+                    <div class="cp_img col-10">
                         <img th:src="${hotel.getImageUrl()}" alt="Product" class="img-fluid">
 
                         </br>
@@ -76,16 +79,7 @@
                         </th:block>
                         </div>
 
-                        <div class="hover">
-                            <th:block sec:authorize="hasAnyAuthority('REGULAR_USER','ADMIN')"  >
-                                <form style="display: inline-block;" th:action="@{'/reviews/add/{hotelId}' (hotelId=${hotel.getId()})}">
-                                    <button type="submit" class="btn btn-primary btn-sm waves-effect"><i class="zmdi ">Leave a review</i></button>
-                                </form>
-                            </th:block>
-                        </div>
-
-
-
+                        <!-- ADMIN FUNCTIONALITIES: DELETE AND EDIT -->
                         <div class="hover">
                             <th:block sec:authorize="hasAuthority('ADMIN')">
                                 <a style="display: inline-block;" th:href="@{'/hotels/admin/edit-form/{id}' (id=${hotel.getId()})}" class="btn btn-secondary btn-sm waves-effect"><i class="zmdi zmdi-edit"></i></a>
@@ -97,11 +91,24 @@
                                 </form>
                             </th:block>
                         </div>
+
+
+                        <div class="hover">
+                            <th:block sec:authorize="hasAnyAuthority('REGULAR_USER','ADMIN')"  >
+                                <form style="display: inline-block;" th:action="@{'/reviews/add/{hotelId}' (hotelId=${hotel.getId()})}">
+                                    <button type="submit" class="btn btn-primary btn-sm waves-effect"><i class="zmdi ">Leave a review</i></button>
+                                </form>
+                            </th:block>
+                        </div>
+
+
+
+
                     </div>
                     <div class="product_details">
                         <h5 th:text="${hotel.getHotelName()}"></h5>
                         <ul class="product_price list-unstyled">
-                            <li class="old_price" th:text="'Rating: ' + ${#numbers.formatDecimal(hotel.getOverralRating(),0, 'COMMA', 1, 'POINT')}"></li>
+                            <li class="old_price" th:text="'Rating: ' + ${#numbers.formatDecimal(hotel.getOverralRating(),0, 'COMMA', 1, 'POINT')} + '☆'"></li>
                         </ul>
                     </div>
                 </div>
@@ -447,8 +454,8 @@
     }
 
     .product_item .product_details {
-        padding-top: 110%;
-        text-align: center
+        padding-top: 115%;
+        text-align: center;
     }
 
     .product_item .product_details h5 {

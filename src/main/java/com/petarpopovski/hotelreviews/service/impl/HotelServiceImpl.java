@@ -1,5 +1,6 @@
 package com.petarpopovski.hotelreviews.service.impl;
 
+import com.petarpopovski.hotelreviews.model.Geolocation;
 import com.petarpopovski.hotelreviews.model.Hotel;
 import com.petarpopovski.hotelreviews.model.Review;
 import com.petarpopovski.hotelreviews.model.exceptions.InvalidHotelIdException;
@@ -48,20 +49,21 @@ public class HotelServiceImpl implements HotelService {
     }
 
     @Override
-    public Hotel create(String hotelName, String address, String imageUrl, String description) {
-        Hotel hotel = new Hotel(hotelName,address,imageUrl,description);
+    public Hotel create(String hotelName, String address, String imageUrl, String description, Geolocation geolocation) {
+        Hotel hotel = new Hotel(hotelName,address,imageUrl,description,geolocation);
         this.hotelRepository.save(hotel);
         return hotel;
     }
 
     @Override
-    public Hotel update(Long hotelId, String hotelName, String address, String imageUrl, String description) {
+    public Hotel update(Long hotelId, String hotelName, String address, String imageUrl, String description,Geolocation geolocation) {
 
         Hotel hotel = this.hotelRepository.findById(hotelId).orElseThrow(() -> new InvalidHotelIdException(hotelId));
         hotel.setHotelName(hotelName);
         hotel.setAddress(address);
         hotel.setImageUrl(imageUrl);
         hotel.setDescription(description);
+        hotel.setGeolocation(geolocation);
         this.hotelRepository.save(hotel);
         return hotel;
     }
