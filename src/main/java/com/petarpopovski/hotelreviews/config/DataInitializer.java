@@ -26,7 +26,7 @@ public class DataInitializer {
      * @desc Initializes data for seeding the database (users, hotels and reviewes)
      *
      */
-    @PostConstruct
+    //@PostConstruct
     public void initData(){
 
         this.userService.registerAsAdministrator("ppopovski53@gmail.com","petarpopovski","1234");
