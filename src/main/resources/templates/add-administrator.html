@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Wines</title>
+
+    <meta charset="UTF-8"/>
+    <title>Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+<body>
+
+<!-- USING THE HEADER FRAGMENT FROM FRAGMENTS/HEADER-->
+<div th:replace="fragments/header :: header"></div>
+
+
+
+<section class="pt-5 pb-5 mt-0 align-items-center d-flex jumbotron">
+    <div class="container" style="background-image: url('https://wallpaperaccess.com/full/2690549.jpg'); opacity: 0.9; background-size: cover; height: 40vh;">
+        <div class="justify-content-center align-items-center d-flex text-center h-100">
+            <div class="col-12 col-md-8  h-50 ">
+                <div>
+                    <h1 class="display-2  text-light mb-2 mt-5 jumbotron-heading">Add administrator</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+            <form action="/users/add" method="POST">
+
+                <input id="id" type="hidden" name="id" th:value="(${user} != null ? ${user.getId()} : '')">
+
+                <div class="form-group">
+                    <label for="email"></label>
+                    <input type="text"
+                           class="form-control"
+                           id="email"
+                           name="email"
+                           required
+                           placeholder="Enter new administrator's email">
+
+
+                    <label for="displayName"></label>
+                    <input type="text"
+                           class="form-control"
+                           id="displayName"
+                           name="displayName"
+                           required
+                           placeholder="Enter new administrator's display name">
+
+                    <label for="password"></label>
+                    <input type="password"
+                           class="form-control"
+                           id="password"
+                           name="password"
+                           required
+                           placeholder="Enter new administrator's password">
+
+                    <div class="container" >
+                        <h4 th:if="${hasError}" th:text="${error}" class="text-danger"></h4>
+                    </div>
+
+
+                </div>
+
+                <button type="submit" class="btn btn-danger">Submit</button>
+                <a type="button" class="btn btn-danger" href="/users">Back</a>
+            </form>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+
+
+<!-- USING THE FOOTER FRAGMENT FROM FRAGMENTS/FOOTER-->
+<div th:replace="fragments/footer :: footer"></div>
+
+
+</body>
+</html>

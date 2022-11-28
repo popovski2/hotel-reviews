@@ -50,13 +50,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User login(String email, String password) {
-        if (email==null || email.isEmpty() || password==null || password.isEmpty()) {
+
+        if(userRepository.findByEmailAndPassword(email,password)==null){
             throw new InvalidUserArgumentsException();
         }
         return userRepository.findByEmailAndPassword(email, password);
     }
-
-
 
     @Override
     public User saveUser(User user) {
@@ -66,19 +65,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User registerAsRegular(String email, String displayName, String password) {
-        if (email==null || email.isEmpty()  || password==null || password.isEmpty()) {
-            throw new InvalidUserArgumentsException();
+
+        if(this.userRepository.findByEmail(email) != null){
+            throw new UserAlreadyExistsException();
         }
         String encryptedPassword = this.passwordEncoder.encode(password);
         User user = new User(email, displayName, encryptedPassword, Role.REGULAR_USER);
-        System.out.println("registered user is: "+ user.getDisplayName());
         return userRepository.save(user);
     }
 
     @Override
     public User registerAsAdministrator(String email, String displayName, String password) {
-        if (email==null || email.isEmpty()  || password==null || password.isEmpty()) {
-            throw new InvalidUserArgumentsException();
+
+        if(this.userRepository.findByEmail(email) != null){
+            throw new UserAlreadyExistsException();
         }
         String encryptedPassword = this.passwordEncoder.encode(password);
         User user = new User(email, displayName, encryptedPassword, Role.ADMIN);

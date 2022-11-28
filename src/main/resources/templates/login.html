@@ -21,7 +21,7 @@
 </div>
 
 <div class="container">
-    <form class="form-signin mt-xl-5" method="post" action="/login">
+    <form class="form-signin mt-xl-5" method="POST" action="/login">
         <h2 class="form-signin-heading">Sign in</h2>
         <br>
         <br>
@@ -35,8 +35,9 @@
         </p>
 
 
-        <div th:if="${hasError}">
-            <div th:text="${error}" class="text-danger">Wrong credentials.</div>
+
+        <div class="container" >
+            <h4 th:if="${hasError}" th:text="${error}" class="text-danger"></h4>
         </div>
 
         <br>

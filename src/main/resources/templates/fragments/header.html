@@ -47,6 +47,12 @@
                         </th:block>
                     </li>
 
+                    <li class="nav-item m-auto">
+                        <th:block sec:authorize="hasAuthority('ADMIN')">
+                            <a class="nav-link active" href="/users">Users</a>
+                        </th:block>
+                    </li>
+
                     <form action="/hotels/search" class="form-inline my-2 my-lg-0" style="padding-left: 10px;" >
                         <div class="input-group input-group-sm">
                             <input type="text"

@@ -3,6 +3,7 @@ package com.petarpopovski.hotelreviews.web.controllers;
 import com.petarpopovski.hotelreviews.filter.CustomUsernamePasswordAuthenticationProvider;
 import com.petarpopovski.hotelreviews.model.exceptions.InvalidUserArgumentsException;
 import com.petarpopovski.hotelreviews.model.exceptions.PasswordsDoNotMatchException;
+import com.petarpopovski.hotelreviews.model.exceptions.UserAlreadyExistsException;
 import com.petarpopovski.hotelreviews.service.interfaces.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,11 +25,11 @@ public class RegisterController {
     private final UserService userService;
     private final CustomUsernamePasswordAuthenticationProvider authenticationProvider;
 
+
     public RegisterController(UserService userService, CustomUsernamePasswordAuthenticationProvider authenticationProvider) {
         this.userService = userService;
         this.authenticationProvider = authenticationProvider;
     }
-
 
 
     @GetMapping
@@ -37,17 +38,10 @@ public class RegisterController {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
-        model.addAttribute("bodyContent","register");
         return "register";
     }
 
-    /**
-     *                          *
-     *                          *
-     *      POST FUNCTIONS      *
-     *                          *
-     *                          *
-     **/
+
     @PostMapping
     public String register(HttpServletRequest request,
                            @RequestParam String username,
@@ -55,9 +49,8 @@ public class RegisterController {
                            @RequestParam String password){
         try {
             this.userService.registerAsRegular(username,name,password);
-            // auto login after registration
 
-            // TUKA MORA DA SE NAPRAVI REGISTER, NE MOZE PREKU USER SERVICE PA POSLE VO SESIJA DA GO CUVAME!!!
+            // AUTO LOGIN AFTER REGISTRATION
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,password);
             System.out.println(" authenticationToken credentials: "+authenticationToken.getCredentials() +" authenticaionToken getDetails: "+authenticationToken.getDetails());
             authenticationToken.setDetails(new WebAuthenticationDetails(request));
@@ -66,7 +59,7 @@ public class RegisterController {
             System.out.println("Authentication getDetails after authenticate(authenticationToken)" + authentication.getDetails());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             return "redirect:/home";
-        } catch (InvalidUserArgumentsException exception){
+        } catch (UserAlreadyExistsException exception){
             return "redirect:/register?error=" + exception.getMessage();
         }
     }
