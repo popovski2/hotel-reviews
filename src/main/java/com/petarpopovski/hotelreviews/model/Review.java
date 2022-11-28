@@ -1,5 +1,7 @@
 package com.petarpopovski.hotelreviews.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,6 +11,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
+@AllArgsConstructor
 @Entity
 public class Review implements Serializable {
 

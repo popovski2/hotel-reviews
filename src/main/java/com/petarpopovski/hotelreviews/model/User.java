@@ -2,6 +2,8 @@ package com.petarpopovski.hotelreviews.model;
 
 
 import com.petarpopovski.hotelreviews.model.enumerations.Role;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,6 +11,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
 
+
+@AllArgsConstructor
 @Entity
 @Table( name = "app_users")
 public class User implements Serializable, UserDetails {

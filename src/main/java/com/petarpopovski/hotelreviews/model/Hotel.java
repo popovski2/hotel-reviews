@@ -1,11 +1,15 @@
 package com.petarpopovski.hotelreviews.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+
+@AllArgsConstructor
 @Entity
 public class Hotel implements Serializable, Comparable<Hotel> {
 
